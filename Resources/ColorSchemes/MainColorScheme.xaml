@@ -1,0 +1,58 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!--Colors-->
+        <!--CommonButton-->
+        <Color x:Key="CommonButtonBackgroundColor">Black</Color>
+        <Color x:Key="CommonButtonBorderColor">#a3a3a3</Color>
+        <Color x:Key="CommonButtonMouseOverBackgroundColor"
+               R="64" G="64" B="64" A="150"/>
+        <Color x:Key="CommonButtonDisabledBackgroundColor">#262626</Color>
+
+        <!--SvgButton-->
+        <Color x:Key="SvgButtonFillColor">White</Color>
+        
+        <!--Accent-->
+        <Color x:Key="AccentColor1">DodgerBlue</Color>
+        <Color x:Key="AccentColor2">DeepSkyBlue</Color>
+
+    <!--Brushes-->
+        <!--SolidColorBrushes-->
+            <!--CommonButton-->
+            <SolidColorBrush x:Key="CommonButtonBackgroundBrush"
+                             Color="{StaticResource CommonButtonBackgroundColor}"/>
+            <SolidColorBrush x:Key="CommonButtonBorderBrush" 
+                             Color="{StaticResource CommonButtonBorderColor}"/>
+            <SolidColorBrush x:Key="CommonButtonMouseOverBackgroundBrush"
+                             Color="{StaticResource CommonButtonMouseOverBackgroundColor}"/>
+
+            <!--SvgButton-->
+            <SolidColorBrush x:Key="SvgButtonFillBrush"
+                             Color="{StaticResource SvgButtonFillColor}"/>
+
+            <!--CommonTextBox-->
+            <SolidColorBrush x:Key="CommonTextBoxForegroundBrush"
+                             Color="White"/>
+            <SolidColorBrush x:Key="CommonTextBoxBackgroundBrush"
+                             Color="Transparent"/>
+            <SolidColorBrush x:Key="CommonTextBoxCaretBrush"
+                             Color="White"/>
+
+            <!--Accent-->
+            <SolidColorBrush x:Key="AccentBrush1"
+                             Color="{StaticResource AccentColor1}"/>
+            <SolidColorBrush x:Key="AccentBrush2"
+                             Color="{StaticResource AccentColor2}"/>
+
+        <!--LinearGradientBrushes-->
+            <!--Accent-->
+            <LinearGradientBrush x:Key="AccentGradientBrush"
+                                 StartPoint="0,0" 
+                                 EndPoint="1,0">
+
+                <GradientStop Color="{StaticResource AccentColor2}" 
+                              Offset="0.0"/>
+                <GradientStop Color="{StaticResource AccentColor1}" 
+                              Offset="0.7"/>
+            </LinearGradientBrush>
+</ResourceDictionary>

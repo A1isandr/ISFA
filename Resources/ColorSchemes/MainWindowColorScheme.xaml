@@ -1,0 +1,37 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    
+    <!--Colors-->
+        <!--HeaderButton-->
+        <Color x:Key="HeaderButtonsForegroundFillColor" 
+               R="255" G="255" B="255" A="100"/>
+        <Color x:Key="HeaderButtonsMouseOverForegroundFillColor" 
+               R="255" G="255" B="255" A="255"/>
+        <Color x:Key="HeaderButtonsBackgroundColor">#1f1f1f</Color>
+        <Color x:Key="CloseWindowButtonMouseOverBackgroundColor">#d11d26</Color>
+        <Color x:Key="CloseWindowButtonDropShadowEffectColor">Red</Color>
+
+    <!--Brushes-->
+        <!--SolidColorBrushes-->
+            <!--Wrapper-->
+            <SolidColorBrush x:Key="WrapperBackgroundBrush"
+                             Color="#242424"/>
+            <SolidColorBrush x:Key="WrapperBorderBrush"
+                             Color="#1a1a1a"/>
+            <SolidColorBrush x:Key="WindowIconBackgroundBrush"
+                             Color="Transparent"/>
+            <SolidColorBrush x:Key="WindowTitleBackgroundBrush"
+                             Color="Transparent"/>
+            <SolidColorBrush x:Key="WindowTitleForegroundBrush"
+                             Color="White"/>
+
+            <!--HeaderButton-->
+            <SolidColorBrush x:Key="HeaderButtonsForegroundFillBrush"
+                             Color="{StaticResource HeaderButtonsForegroundFillColor}"/>
+            <SolidColorBrush x:Key="HeaderButtonsBackgroundBrush"
+                             Color="{StaticResource HeaderButtonsBackgroundColor}"/>
+            <SolidColorBrush x:Key="HeaderButtonsMouseOverForegroundFillBrush"
+                             Color="{StaticResource HeaderButtonsMouseOverForegroundFillColor}"/>
+            <SolidColorBrush x:Key="CloseWindowButtonMouseOverBackgroundBrush"
+                             Color="{StaticResource CloseWindowButtonMouseOverBackgroundColor}"/>
+</ResourceDictionary>

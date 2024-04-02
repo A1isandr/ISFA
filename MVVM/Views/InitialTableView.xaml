@@ -1,0 +1,230 @@
+﻿<reactiveUi:ReactiveUserControl x:Class="ISFA.MVVM.Views.InitialTableView"
+                                xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                                xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                                xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+                                xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+                                xmlns:local="clr-namespace:ISFA.MVVM.Views"
+                                xmlns:reactiveUi="http://reactiveui.net"
+                                xmlns:vm="clr-namespace:ISFA.MVVM.ViewModels"
+                                xmlns:converters="clr-namespace:YetAnotherMessenger.Misc.Converters"
+                                xmlns:misc="clr-namespace:ISFA.Misc"
+                                x:TypeArguments="vm:InitialTableViewModel" 
+                                mc:Ignorable="d" 
+                                d:DesignHeight="450" d:DesignWidth="800">
+    
+    <UserControl.Resources>
+        <converters:RectConverter x:Key="RectConverter"/>
+    </UserControl.Resources>
+        
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.3*" MaxHeight="70" MinHeight="50"/>
+            <RowDefinition/>
+            <RowDefinition Height="0.3*" MaxHeight="70" MinHeight="50"/>
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+
+        <Border
+            Grid.Row="0"
+            Grid.RowSpan="3"
+            Grid.Column="1"
+            BorderThickness="1"
+            BorderBrush="{StaticResource TableBorderBrush}"
+            Background="{StaticResource TableBackgroundBrush}"
+            CornerRadius="20">
+
+            <Border.Clip>
+                <RectangleGeometry 
+                    RadiusX="20"
+                    RadiusY="20">
+
+                    <RectangleGeometry.Rect>
+                        <MultiBinding Converter="{StaticResource RectConverter}">
+                            <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type Border}}" Path="ActualWidth"/>
+                            <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type Border}}" Path="ActualHeight"/>
+                        </MultiBinding>
+                    </RectangleGeometry.Rect>
+                </RectangleGeometry>
+            </Border.Clip>
+
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="0.2*" MaxHeight="70" MinHeight="40"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="0.2*" MaxWidth="80" MinWidth="60"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <Label
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    Content="A / Q"
+                    FontSize="20"
+                    FontWeight="Medium"
+                    Foreground="White"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"/>
+
+                <Line
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="2"
+                    X1="0" 
+                    Y1="0"
+                    X2="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Border}}, Path=ActualWidth}" 
+                    Y2="0"
+                    Stroke="{StaticResource TableBorderBrush}"
+                    StrokeThickness="1"
+                    VerticalAlignment="Bottom"/>
+
+                <Line
+                    Grid.Row="0"
+                    Grid.RowSpan="2"
+                    Grid.Column="0"
+                    X1="0" 
+                    Y1="0"
+                    X2="0" 
+                    Y2="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Border}}, Path=ActualHeight}"
+                    Stroke="{StaticResource TableBorderBrush}"
+                    StrokeThickness="1"
+                    HorizontalAlignment="Right"/>
+
+                <Grid
+                    Grid.Row="0"
+                    Grid.Column="1"
+                    misc:ScrollViewerHelper.ShiftWheelScrollsHorizontally="True">
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <ScrollViewer x:Name="ColumnHeadersScrollViewer"
+                        Grid.Column="0"
+                        HorizontalScrollBarVisibility="Hidden"
+                        VerticalScrollBarVisibility="Disabled"
+                        Style="{StaticResource CommonScrollViewer}">
+
+                        <ItemsControl x:Name="ColumnHeaders">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel
+                                        Orientation="Horizontal"
+                                        VerticalAlignment="Center"/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+
+                            <ItemsControl.ItemContainerStyle>
+                                <Style>
+                                    <Setter Property="Control.Width" Value="90"></Setter>
+                                    <Setter Property="Control.Height" Value="40"></Setter>
+                                    <Setter Property="Control.Margin" Value="5, 0, 5, 0"></Setter>
+                                </Style>
+                            </ItemsControl.ItemContainerStyle>
+                        </ItemsControl>
+                    </ScrollViewer>
+                </Grid>
+
+                <Grid
+                    Grid.Row="1"
+                    Grid.Column="0">
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <ScrollViewer x:Name="RowHeadersScrollViewer"
+                        Grid.Row="0"
+                        HorizontalScrollBarVisibility="Disabled"
+                        VerticalScrollBarVisibility="Hidden"
+                        Style="{StaticResource CommonScrollViewer}">
+
+                        <ItemsControl x:Name="RowHeaders">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel
+                                        Orientation="Vertical"
+                                        HorizontalAlignment="Center"/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+
+                            <ItemsControl.ItemContainerStyle>
+                                <Style>
+                                    <Setter Property="Control.Width" Value="50"></Setter>
+                                    <Setter Property="Control.Height" Value="40"></Setter>
+                                    <Setter Property="Control.FontStyle" Value="Italic"></Setter>
+                                    <Setter Property="Control.HorizontalContentAlignment" Value="Stretch"></Setter>
+                                    <Setter Property="Control.Margin" Value="0, 5, 0, 5"></Setter>
+                                </Style>
+                            </ItemsControl.ItemContainerStyle>
+                        </ItemsControl>
+                    </ScrollViewer>
+                </Grid>
+                
+                <TextBlock x:Name="EmptyTableLabel"
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    Text="Добавьте столбцы и строки с помошью кнопки '+'."
+                    FontSize="14"
+                    FontWeight="Medium"
+                    Foreground="Gray"
+                    TextAlignment="Center"
+                    TextWrapping="WrapWithOverflow"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Margin="10"/>
+
+                <Border
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    misc:ScrollViewerHelper.ShiftWheelScrollsHorizontally="True">
+
+                    <ScrollViewer x:Name="TableScrollViewer"
+                        HorizontalScrollBarVisibility="Auto"
+                        VerticalScrollBarVisibility="Auto"
+                        Style="{StaticResource CommonScrollViewer}"
+                        ScrollChanged="ScrollViewer_OnScrollChanged">
+
+                        <ItemsControl x:Name="Columns">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel
+                                        Orientation="Horizontal"/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                        </ItemsControl>
+                    </ScrollViewer>
+                </Border>
+            </Grid>
+        </Border>
+
+        <Button x:Name="AddRowButton"
+                Grid.Row="2"
+                Grid.Column="0"
+                Width="30"
+                Height="30"
+                VerticalAlignment="Center"
+                Content="{Binding Source={StaticResource PlusIcon}, Path=Geometry}"
+                Style="{StaticResource TableButton}"
+                Margin="10"/>
+
+        <Button x:Name="AddColumnButton"
+                Grid.Row="0"
+                Grid.Column="2"
+                Width="30"
+                Height="30"
+                VerticalAlignment="Center"
+                Content="{Binding Source={StaticResource PlusIcon}, Path=Geometry}"
+                Style="{StaticResource TableButton}"
+                Margin="10"/>
+    </Grid>
+</reactiveUi:ReactiveUserControl>

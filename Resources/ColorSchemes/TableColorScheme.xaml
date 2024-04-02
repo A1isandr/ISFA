@@ -1,0 +1,13 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!--Colors-->
+        <Color x:Key="TableBorderColor">#a3a3a3</Color>
+        <Color x:Key="TableBackgroundColor">#121212</Color>
+
+    <!--SolidColorBrushes-->
+        <SolidColorBrush x:Key="TableBorderBrush"
+                         Color="{StaticResource TableBorderColor}"/>
+        <SolidColorBrush x:Key="TableBackgroundBrush"
+                         Color="{StaticResource TableBackgroundColor}"/>
+</ResourceDictionary>
