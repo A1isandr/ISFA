@@ -15,16 +15,16 @@ using System.Windows.Media.Imaging;
 using System.Windows.Media.TextFormatting;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using ISFA.MVVM.ViewModels;
+using ISFA.MVVM.ViewModels.InitialTable;
 using ReactiveMarbles.ObservableEvents;
 using ReactiveUI;
 
 namespace ISFA.MVVM.Views
 {
-	/// <summary>
-	/// Логика взаимодействия для InitialTableView.xaml
-	/// </summary>
-	public partial class InitialTableView : ReactiveUserControl<InitialTableViewModel>
+    /// <summary>
+    /// Логика взаимодействия для InitialTableView.xaml
+    /// </summary>
+    public partial class InitialTableView : ReactiveUserControl<InitialTableViewModel>
 	{
 		public InitialTableView()
 		{
@@ -35,7 +35,7 @@ namespace ISFA.MVVM.Views
 			this.WhenActivated(disposables =>
 			{
 				this.OneWayBind(ViewModel,
-						viewModel => viewModel.Columns,
+						viewModel => viewModel.States,
 						view => view.Columns.ItemsSource)
 					.DisposeWith(disposables);
 

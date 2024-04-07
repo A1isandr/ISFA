@@ -1,0 +1,171 @@
+﻿<reactiveUi:ReactiveUserControl x:Class="ISFA.MVVM.Views.BinaryMatrix.BinaryMatrixView"
+                                xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                                xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                                xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+                                xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+                                xmlns:local="clr-namespace:ISFA.MVVM.Views"
+                                xmlns:reactiveUi="http://reactiveui.net"
+                                xmlns:misc="clr-namespace:ISFA.Misc"
+                                xmlns:binaryMatrix="clr-namespace:ISFA.MVVM.ViewModels.BinaryMatrix"
+                                x:TypeArguments="binaryMatrix:BinaryMatrixViewModel"
+                                mc:Ignorable="d" 
+                                d:DesignHeight="450" d:DesignWidth="800">
+
+    <UserControl.Resources>
+        <misc:RectConverter x:Key="RectConverter"/>
+    </UserControl.Resources>
+
+    <Border x:Name="TableBorder"
+        BorderThickness="1"
+        BorderBrush="{StaticResource TableBorderBrush}"
+        Background="{StaticResource TableBackgroundBrush}"
+        CornerRadius="20">
+
+        <Border.Clip>
+            <RectangleGeometry 
+                RadiusX="20"
+                RadiusY="20">
+
+                <RectangleGeometry.Rect>
+                    <MultiBinding Converter="{StaticResource RectConverter}">
+                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type Border}}" Path="ActualWidth"/>
+                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type Border}}" Path="ActualHeight"/>
+                    </MultiBinding>
+                </RectangleGeometry.Rect>
+            </RectangleGeometry>
+        </Border.Clip>
+
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition MaxHeight="50" MinHeight="40"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition MaxWidth="50" MinWidth="60"/>
+            </Grid.ColumnDefinitions>
+
+            <Line
+                Grid.Row="0"
+                Grid.Column="0"
+                Grid.ColumnSpan="2"
+                X1="0" 
+                Y1="0"
+                X2="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Border}}, Path=ActualWidth}" 
+                Y2="0"
+                Stroke="{StaticResource TableBorderBrush}"
+                StrokeThickness="1"
+                VerticalAlignment="Bottom"/>
+
+            <Line
+                Grid.Row="0"
+                Grid.RowSpan="2"
+                Grid.Column="0"
+                X1="0" 
+                Y1="0"
+                X2="0" 
+                Y2="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Border}}, Path=ActualHeight}"
+                Stroke="{StaticResource TableBorderBrush}"
+                StrokeThickness="1"
+                HorizontalAlignment="Right"/>
+
+            <Grid
+                Grid.Row="0"
+                Grid.Column="0"
+                misc:ScrollViewerHelper.ShiftWheelScrollsHorizontally="True">
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <ScrollViewer x:Name="ColumnHeadersScrollViewer"
+                              Grid.Column="0"
+                              HorizontalScrollBarVisibility="Hidden"
+                              VerticalScrollBarVisibility="Disabled"
+                              Style="{StaticResource CommonScrollViewer}">
+
+                    <ItemsControl x:Name="ColumnHeaders"
+                                  HorizontalAlignment="Right">
+
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel
+                                    Orientation="Horizontal"
+                                    VerticalAlignment="Center"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+
+                        <ItemsControl.ItemContainerStyle>
+                            <Style>
+                                <Setter Property="Control.Width" Value="50"></Setter>
+                                <Setter Property="Control.Height" Value="40"></Setter>
+                                <Setter Property="Control.IsEnabled" Value="False"></Setter>
+                            </Style>
+                        </ItemsControl.ItemContainerStyle>
+                    </ItemsControl>
+                </ScrollViewer>
+            </Grid>
+
+            <Grid
+                Grid.Row="1"
+                Grid.Column="1">
+
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <ScrollViewer x:Name="RowHeadersScrollViewer"
+                              Grid.Row="0"
+                              HorizontalScrollBarVisibility="Disabled"
+                              VerticalScrollBarVisibility="Hidden"
+                              Style="{StaticResource CommonScrollViewer}">
+
+                    <ItemsControl x:Name="RowHeaders">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel
+                                    Orientation="Vertical"
+                                    HorizontalAlignment="Center"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+
+                        <ItemsControl.ItemContainerStyle>
+                            <Style>
+                                <Setter Property="Control.Width" Value="50"></Setter>
+                                <Setter Property="Control.Height" Value="50"></Setter>
+                                <Setter Property="Control.IsEnabled" Value="False"></Setter>
+                            </Style>
+                        </ItemsControl.ItemContainerStyle>
+                    </ItemsControl>
+                </ScrollViewer>
+            </Grid>
+
+            <Border
+                Grid.Row="1"
+                Grid.Column="0"
+                misc:ScrollViewerHelper.ShiftWheelScrollsHorizontally="True">
+
+                <ScrollViewer x:Name="TableScrollViewer"
+                              HorizontalScrollBarVisibility="Auto"
+                              VerticalScrollBarVisibility="Auto"
+                              Style="{StaticResource CommonScrollViewer}"
+                              ScrollChanged="TableScrollViewer_OnScrollChanged">
+
+                    <ItemsControl x:Name="Columns"
+                                  HorizontalAlignment="Right">
+
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel
+                                    Orientation="Vertical"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                    </ItemsControl>
+                </ScrollViewer>
+            </Border>
+        </Grid>
+    </Border>
+</reactiveUi:ReactiveUserControl>

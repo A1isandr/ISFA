@@ -5,6 +5,7 @@ using System.Reactive;
 using System.Reactive.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ISFA.MVVM.ViewModels.InitialTable;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 

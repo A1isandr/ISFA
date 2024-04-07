@@ -8,12 +8,15 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using ISFA.MVVM.Models;
+using ISFA.MVVM.ViewModels.BinaryMatrix;
+using ISFA.MVVM.ViewModels.InitialTable;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
+using StateViewModel = ISFA.MVVM.ViewModels.BinaryMatrix.StateViewModel;
 
 namespace ISFA.MVVM.ViewModels
 {
-	public class MainViewModel : ReactiveObject
+    public class MainViewModel : ReactiveObject
 	{
 		#region Singleton
 
@@ -36,6 +39,10 @@ namespace ISFA.MVVM.ViewModels
 		public ReactiveCommand<Unit, Unit> CleanCommand { get; }
 
 		private InitialTableViewModel InitialTable { get; } = InitialTableViewModel.Instance;
+		private BinaryMatrixViewModel BinaryMatrix { get; } = BinaryMatrixViewModel.Instance;
+
+		private readonly ObservableAsPropertyHelper<bool> _isBinaryMatrixVisible;
+		public bool IsBinaryMatrixVisible => _isBinaryMatrixVisible.Value;
 
 		#endregion
 
@@ -53,31 +60,51 @@ namespace ISFA.MVVM.ViewModels
 
 			CalculateCommand = ReactiveCommand.CreateFromObservable<Unit, Unit>(_ =>
 			{
-				foreach (var column in InitialTable.Columns)
+				// Заполняем все пустые ячейки.
+				foreach (var state in InitialTable.States)
 				{
-					foreach (var state in column.States)
+					foreach (var pair in state.TransitionReactionPairs)
 					{
-						state.State.Transition = state.State.Transition == string.Empty
-							? StateViewModel.UndefinedSymbol
-							: state.State.Transition;
+						pair.TransitionReactionPair.Transition = pair.TransitionReactionPair.Transition == string.Empty
+							? TransitionReactionPair.UndefinedSymbol
+							: pair.TransitionReactionPair.Transition;
 
-						state.State.Reaction = state.State.Reaction == string.Empty
-							? StateViewModel.UndefinedSymbol
-							: state.State.Reaction;
+						pair.TransitionReactionPair.Reaction = pair.TransitionReactionPair.Reaction == string.Empty
+							? TransitionReactionPair.UndefinedSymbol
+							: pair.TransitionReactionPair.Reaction;
 					}
 				}
 
+				// Проводим анализ.
 				PaulAnger.Calculate
 				(
-					InitialTable.Columns
+					InitialTable.States
 						.Select
 						(
-							column => column.States
-								.Select(state => state.State)
+							column => column.TransitionReactionPairs
+								.Select(state => state.TransitionReactionPair)
 								.ToList()
 						)
 						.ToList()
 				);
+
+				BinaryMatrix.ColumnHeaders = new ObservableCollection<HeaderViewModel>(InitialTable.ColumnHeaders.Skip(1));
+				BinaryMatrix.RowHeaders = new ObservableCollection<HeaderViewModel>(InitialTable.ColumnHeaders.Take(InitialTable.ColumnHeaders.Count - 1));
+
+				// Заполняем бинарную матрицу.
+				ObservableCollection<StateViewModel> binaryMatrix = [];
+
+				foreach (var row in PaulAnger.BinaryMatrix)
+				{
+					binaryMatrix.Add(new StateViewModel 
+					{
+						Cells = new ObservableCollection<BinaryMatrixCellViewModel>(row
+							.Select(value => new BinaryMatrixCellViewModel(value))
+							.ToList())
+					});
+				}
+
+				BinaryMatrix.BinaryMatrix = binaryMatrix;
 
 				return Observable.Return(Unit.Default);
 			}, canCalculate);
@@ -85,8 +112,15 @@ namespace ISFA.MVVM.ViewModels
 			CleanCommand = ReactiveCommand.CreateFromObservable<Unit, Unit>(_ =>
 			{
 				InitialTableViewModel.Instance.CleanCommand.Execute();
+				BinaryMatrixViewModel.Instance.CleanCommand.Execute();
+
 				return Observable.Return(Unit.Default);
 			}, canClean);
+
+			_isBinaryMatrixVisible = this
+				.WhenAnyValue(x => x.BinaryMatrix.IsTableNotEmpty)
+				.Select(isNotEmpty => isNotEmpty)
+				.ToProperty(this, x => x.IsBinaryMatrixVisible);
 		}
 
 		#endregion

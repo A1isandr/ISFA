@@ -13,25 +13,30 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using ISFA.MVVM.ViewModels;
+using ISFA.MVVM.ViewModels.BinaryMatrix;
 using ReactiveUI;
 
 namespace ISFA.MVVM.Views
 {
-	/// <summary>
-	/// Логика взаимодействия для TableColumnView.xaml
-	/// </summary>
-	public partial class TableColumnView : ReactiveUserControl<TableColumnViewModel>
+    /// <summary>
+    /// Логика взаимодействия для BinaryMatrixCell.xaml
+    /// </summary>
+    public partial class BinaryMatrixCellView : ReactiveUserControl<BinaryMatrixCellViewModel>
 	{
-		public TableColumnView()
+		public BinaryMatrixCellView()
 		{
 			InitializeComponent();
 
 			this.WhenActivated(disposables =>
 			{
 				this.OneWayBind(ViewModel,
-						viewModel => viewModel.States,
-						view => view.Column.ItemsSource)
+						viewModel => viewModel.BinaryMatrixCell.Value,
+						view => view.Value.Content)
+					.DisposeWith(disposables);
+
+				this.OneWayBind(ViewModel,
+						viewModel => viewModel.ForegroundBrush,
+						view => view.Value.Foreground)
 					.DisposeWith(disposables);
 			});
 		}

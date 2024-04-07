@@ -7,19 +7,28 @@
     </ApplicationDefinition>
   </ItemGroup>
   <ItemGroup>
+    <Compile Update="MVVM\Views\BinaryMatrix\BinaryMatrixCellView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="MVVM\Views\BinaryMatrix\BinaryMatrixView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="MVVM\Views\BinaryMatrix\StateView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="MVVM\Views\HeaderView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="MVVM\Views\InitialTableView.xaml.cs">
+    <Compile Update="MVVM\Views\InitialTable\InitialTableView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="MVVM\Views\MainView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="MVVM\Views\StateView.xaml.cs">
+    <Compile Update="MVVM\Views\InitialTable\TransitionReactionPairView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="MVVM\Views\TableColumnView.xaml.cs">
+    <Compile Update="MVVM\Views\InitialTable\StateView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
@@ -27,19 +36,28 @@
     <Page Update="MainWindow.xaml">
       <SubType>Designer</SubType>
     </Page>
+    <Page Update="MVVM\Views\BinaryMatrix\BinaryMatrixCellView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="MVVM\Views\BinaryMatrix\BinaryMatrixView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="MVVM\Views\BinaryMatrix\StateView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="MVVM\Views\HeaderView.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="MVVM\Views\InitialTableView.xaml">
+    <Page Update="MVVM\Views\InitialTable\InitialTableView.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="MVVM\Views\MainView.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="MVVM\Views\StateView.xaml">
+    <Page Update="MVVM\Views\InitialTable\TransitionReactionPairView.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="MVVM\Views\TableColumnView.xaml">
+    <Page Update="MVVM\Views\InitialTable\StateView.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Resources\ColorSchemes\MainColorScheme.xaml">

@@ -40,6 +40,11 @@ namespace ISFA.MVVM.Views
 			            viewModel => viewModel.CleanCommand,
 			            view => view.CleanButton)
 		            .DisposeWith(disposables);
+
+				this.OneWayBind(ViewModel,
+						viewModel => viewModel.IsBinaryMatrixVisible,
+						view => view.BinaryMatrix.Visibility)
+					.DisposeWith(disposables);
             });
         }
     }
