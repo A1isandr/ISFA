@@ -3,18 +3,25 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static ISFA.MVVM.Models.BinaryMatrixCell;
 
 namespace ISFA.MVVM.Models
 {
-	public class BinaryMatrixCell(byte value, bool isClearlyIncompatible = false, bool isClearlyCompatible = false)
+	public class BinaryMatrixCell(byte? value = null, CellState state = CellState.Initialized)
 	{
 		#region Properties
 
-		public byte Value { get; set; } = value;
+		public byte? Value { get; set; } = value;
 
-		public bool IsClearlyIncompatible { get; set; } = isClearlyIncompatible;
+		public CellState State { get; set; } = state;
 
-		public bool IsClearlyCompatible { get; set; } = isClearlyCompatible;
+		public enum CellState
+		{
+			Initialized,
+			ClearlyIncompatible,
+			ClearlyCompatible,
+			Final
+		}
 
 		#endregion
 	}

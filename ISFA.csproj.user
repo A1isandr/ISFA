@@ -60,6 +60,9 @@
     <Page Update="MVVM\Views\InitialTable\StateView.xaml">
       <SubType>Designer</SubType>
     </Page>
+    <Page Update="Resources\ColorSchemes\BinaryMatrixColorScheme.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="Resources\ColorSchemes\MainColorScheme.xaml">
       <SubType>Designer</SubType>
     </Page>

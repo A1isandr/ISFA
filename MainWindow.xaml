@@ -22,8 +22,6 @@
     </WindowChrome.WindowChrome>
 
     <Border x:Name="Wrapper"
-        BorderThickness="2"
-        BorderBrush="{StaticResource WrapperBorderBrush}"
         Background="{StaticResource WrapperBackgroundBrush}"
         CornerRadius="0">
 

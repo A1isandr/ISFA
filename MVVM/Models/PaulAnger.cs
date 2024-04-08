@@ -1,33 +1,37 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using ISFA.MVVM.Models;
+﻿using System.Windows;
+using static ISFA.MVVM.Models.BinaryMatrixCell;
 
 namespace ISFA.MVVM.Models
 {
-    static class PaulAnger
+	internal static class PaulAnger
     {
 		#region Properties
 
-		private static List<List<TransitionReactionPair>> _states = [];
+		public static List<List<TransitionReactionPair>> States { get; private set; } = [];
 
-		public static List<List<BinaryMatrixCell>> BinaryMatrix {get; private set;} = [];
+		public static List<List<BinaryMatrixCell>> BinaryMatrix { get; private set; } = [];
+
+		public static HashSet<HashSet<int>> CompatibilitySets { get; private set; } = [];
 
 		#endregion
 
 		#region Methods
 
+		/// <summary>
+		/// Применяет алгоритм Ангера-Пола к неполному автомату.
+		/// </summary>
+		/// <param name="states"></param>
 		public static void Calculate(List<List<TransitionReactionPair>> states)
 		{
-			_states = states;
+			States = states;
 			BinaryMatrix = [];
+			CompatibilitySets = [];
 
 			// Строим бинарную матрицу.
 			BuildBinaryMatrix();
+
+			// Строим правильную группировку.
+			//BuildCorrectCovering();
 		}
 
 		/// <summary>
@@ -35,16 +39,16 @@ namespace ISFA.MVVM.Models
 		/// </summary>
 		private static void BuildBinaryMatrix()
 		{
-			var columns = _states.Count;
-			var rows = _states.First().Count;
-			var undefinedSymbol = TransitionReactionPair.UndefinedSymbol;
+			var columns = States.Count;
+			var rows = States.First().Count;
+			const string undefinedSymbol = TransitionReactionPair.UndefinedSymbol;
 
 			// Ищем явно совметсимые/несовместимые состояния.
 			// Сравниваем все состояния друг с другом.
 			for (int i = 0; i < columns - 1; i++)
 			{
 				// Заполняем i-тую строку бинарной матрицы нулями.
-				BinaryMatrix.Add(Enumerable.Repeat(new BinaryMatrixCell(0), columns - (i + 1)).ToList());
+				BinaryMatrix.Add(Enumerable.Repeat(new BinaryMatrixCell(), columns - (i + 1)).ToList());
 
 				for (int j = i + 1; j < columns; j++)
 				{
@@ -54,12 +58,12 @@ namespace ISFA.MVVM.Models
 					for (int k = 0; k < rows; k++)
 					{
 						// Проверяем, явно несовметсимы ли два состояния.
-						if (_states[i][k].Reaction != undefinedSymbol &&
-							_states[j][k].Reaction != undefinedSymbol &&
-							_states[i][k].Reaction != _states[j][k].Reaction)
+						if (States[i][k].Reaction != undefinedSymbol &&
+							States[j][k].Reaction != undefinedSymbol &&
+							States[i][k].Reaction != States[j][k].Reaction)
 						{
 							// Если явно несовместимы - ставим ноль в бинарной матрице.
-							BinaryMatrix[i][j - i - 1] = new BinaryMatrixCell(0, true);
+							BinaryMatrix[i][j - i - 1] = new BinaryMatrixCell(0, CellState.ClearlyIncompatible);
 
 							break;
 						}
@@ -74,24 +78,25 @@ namespace ISFA.MVVM.Models
 						// 1/? 1/-
 						// -/? ?/-
 						// ?/- -/?
-						if ((_states[i][k].Transition == undefinedSymbol &&
-							 _states[i][k].Reaction == undefinedSymbol) ||
-							(_states[j][k].Transition == undefinedSymbol &&
-							 _states[j][k].Reaction == undefinedSymbol) ||
-							(_states[i][k].Transition == _states[j][k].Transition &&
-							 _states[i][k].Reaction == _states[j][k].Reaction) ||
-							(_states[i][k].Transition == _states[j][k].Transition &&
-							 _states[i][k].Reaction == undefinedSymbol) ||
-							(_states[i][k].Transition == undefinedSymbol &&
-							 _states[i][k].Reaction == _states[j][k].Reaction) ||
-							(_states[j][k].Transition == undefinedSymbol &&
-							 _states[j][k].Reaction == _states[i][k].Reaction) ||
-							(_states[j][k].Reaction == undefinedSymbol &&
-							 _states[i][k].Transition == _states[j][k].Transition) ||
-							(_states[i][k].Transition == undefinedSymbol &&
-							 _states[j][k].Reaction == undefinedSymbol) ||
-							(_states[j][k].Transition == undefinedSymbol &&
-							 _states[i][k].Reaction == undefinedSymbol))
+						// TODO: Это выглядит просто ужасно, надо переписать.
+						if ((States[i][k].Transition == undefinedSymbol &&
+							 States[i][k].Reaction == undefinedSymbol) ||
+							(States[j][k].Transition == undefinedSymbol &&
+							 States[j][k].Reaction == undefinedSymbol) ||
+							(States[i][k].Transition == States[j][k].Transition &&
+							 States[i][k].Reaction == States[j][k].Reaction) ||
+							(States[i][k].Transition == States[j][k].Transition &&
+							 States[i][k].Reaction == undefinedSymbol) ||
+							(States[i][k].Transition == undefinedSymbol &&
+							 States[i][k].Reaction == States[j][k].Reaction) ||
+							(States[j][k].Transition == undefinedSymbol &&
+							 States[j][k].Reaction == States[i][k].Reaction) ||
+							(States[j][k].Reaction == undefinedSymbol &&
+							 States[i][k].Transition == States[j][k].Transition) ||
+							(States[i][k].Transition == undefinedSymbol &&
+							 States[j][k].Reaction == undefinedSymbol) ||
+							(States[j][k].Transition == undefinedSymbol &&
+							 States[i][k].Reaction == undefinedSymbol))
 						{
 							clearlyCompatibleCount++;
 						}
@@ -100,7 +105,7 @@ namespace ISFA.MVVM.Models
 					if (clearlyCompatibleCount != rows) continue;
 
 					// Если явно совместимы - ставим единицу в бинарной матрице.
-					BinaryMatrix[i][j - i - 1] = new BinaryMatrixCell(1, false, true);
+					BinaryMatrix[i][j - i - 1] = new BinaryMatrixCell(1, CellState.ClearlyCompatible);
 				}
 			}
 
@@ -109,13 +114,69 @@ namespace ISFA.MVVM.Models
 			{
 				for (int j = 0; j < BinaryMatrix[i].Count; j++)
 				{
-					if (BinaryMatrix[i][j].Value == 1 || BinaryMatrix[i][j].IsClearlyIncompatible) continue;
+					if (BinaryMatrix[i][j].Value is not null) continue;
 
-					MessageBox.Show($"Now checking: {i + 1} {j + 1 + i + 1}");
-					BinaryMatrix[i][j] = IsCompatible(i, j) ?
-						new BinaryMatrixCell(1) :
-						new BinaryMatrixCell(0);
+					//MessageBox.Show($"Now checking: {i + 1} {j + 1 + i + 1}");
+					BinaryMatrix[i][j] = IsCompatible(i, j) 
+						? new BinaryMatrixCell(1, CellState.Final)
+						: new BinaryMatrixCell(0, CellState.Final);
 				}
+			}
+		}
+
+		/// <summary>
+		/// Строит правильную группировку.
+		/// </summary>
+		private static void BuildCorrectCovering()
+		{
+			// Составляем множества совместимости на основе бинарной матрицы.
+			for (int i = 0; i < BinaryMatrix.Count; i++)
+			{
+				CompatibilitySets.Add([i]);
+
+				for (int j = 0; j < BinaryMatrix[i].Count; j++)
+				{
+					if (BinaryMatrix[i][j].Value == 1)
+					{
+						CompatibilitySets.Last().Add(j);
+					}
+				}
+			}
+
+			// Проверяем множества на наличие несовместимых состояний.
+			foreach (var set in CompatibilitySets)
+			{
+				FindIncompatibleStates(set);
+			}
+		}
+
+		/// <summary>
+		/// Поиск несовместимых состояний.
+		/// </summary>
+		/// <param name="set"></param>
+		/// <returns></returns>
+		private static HashSet<int> FindIncompatibleStates(HashSet<int> set)
+		{
+			// TODO: Имплементировать логику для поиска несовместимых состояний.
+			HashSet<int> incompatibleStatesSet = [];
+			HashSet<int> compatibleStatesSet = [];
+
+			for (int j = 1; j < set.Count; j++)
+			{
+				for (int k = j + 1; k < set.Count; k++)
+				{
+					if (BinaryMatrix[set.ElementAt(j)][set.ElementAt(k)].Value == 0)
+					{
+						incompatibleStatesSet.Add(set.ElementAt(j));
+					}
+				}
+			}
+
+			var newIncompatibleStatesSet = FindIncompatibleStates(incompatibleStatesSet);
+
+			if (newIncompatibleStatesSet.Count == 0)
+			{
+
 			}
 		}
 
@@ -127,44 +188,55 @@ namespace ISFA.MVVM.Models
 		/// <returns></returns>
 		private static bool IsCompatible(int row, int column)
 		{
-			var state1 = _states[row];
-			var state2 = _states[column + row + 1];
+			// TODO: Рассмотреть возможные петли.
 
-			if (BinaryMatrix[row][column].IsClearlyCompatible)
+			var state1 = States[row];
+			var state2 = States[column + row + 1];
+
+			if (BinaryMatrix[row][column].State == CellState.ClearlyCompatible)
 			{
 				return true;
 			}
-			if (BinaryMatrix[row][column].IsClearlyIncompatible)
+			if (BinaryMatrix[row][column].State == CellState.ClearlyIncompatible)
 			{
 				return false;
 			}
 
 			for (int k = 0; k < state1.Count; k++)
 			{
+				// Если переходы не определены - пропускаем.
 				if (state1[k].Transition == TransitionReactionPair.UndefinedSymbol ||
 				    state2[k].Transition == TransitionReactionPair.UndefinedSymbol) continue;
 
+				// Если переходы совпадают - пропускаем.
 				if (state1[k].Transition == state2[k].Transition) continue;
 
-				MessageBox.Show($"{row + 1} {column + 1 + row + 1} -> {state1[k].Transition} {state2[k].Transition}");
-				(int newRow, int newColumn) = StateToBinaryCoords(Convert.ToInt32(state1[k].Transition) - 1, Convert.ToInt32(state2[k].Transition) - 1);
-				MessageBox.Show($"Recursive checking: {state1[k].Transition} {state2[k].Transition} {IsCompatible(newRow, newColumn)}");
+				//MessageBox.Show($"{row + 1} {column + 1 + row + 1} -> {state1[k].Transition} {state2[k].Transition}");
 
+				(int newRow, int newColumn) = StateToBinaryMatrixCoords(Convert.ToInt32(state1[k].Transition) - 1, Convert.ToInt32(state2[k].Transition) - 1);
+
+				// Если состояние переходит в само себя - пропускаем, чтобы не образовалась петля.
+				if ((newRow == row && newColumn == column) ||
+				    (newRow == column && newColumn == row)) continue;
+
+				//MessageBox.Show($"Recursive checking: {state1[k].Transition} {state2[k].Transition} {IsCompatible(newRow, newColumn)}");
+
+				// Проверяем совместимость двух состояний.
 				return IsCompatible(newRow, newColumn);
 			}
 
 			return true;
 		}
 
-		private static (int row, int column) StateToBinaryCoords(int state1Coords, int state2Coords)
+		private static (int row, int column) StateToBinaryMatrixCoords(int state1Coords, int state2Coords)
 		{
-			// Ensure state1Coords is always less than state2Coords for consistency.
+			// Проверяем, чтобы state1Coords было меньше state2Coords.
 			if (state1Coords > state2Coords)
 			{
 				(state1Coords, state2Coords) = (state2Coords, state1Coords);
 			}
 
-			// Calculate the row and column based on the triangular structure of the binary matrix.
+			// Расчитываем координаты в бинарной матрице.
 			int row = state1Coords;
 			int column = state2Coords - state1Coords - 1;
 

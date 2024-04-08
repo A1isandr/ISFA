@@ -10,6 +10,7 @@
                 <ResourceDictionary Source="/Resources/ColorSchemes/MainColorScheme.xaml"/>
                 <ResourceDictionary Source="/Resources/ColorSchemes/MainWindowColorScheme.xaml"/>
                 <ResourceDictionary Source="/Resources/ColorSchemes/TableColorScheme.xaml"/>
+                <ResourceDictionary Source="/Resources/ColorSchemes/BinaryMatrixColorScheme.xaml"/>
 
                 <ResourceDictionary Source="/Resources/Styles/Button.xaml"/>
                 <ResourceDictionary Source="/Resources/Styles/Label.xaml"/>

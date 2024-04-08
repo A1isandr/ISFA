@@ -1,0 +1,15 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    
+    <!--Colors-->
+        <Color x:Key="ClearlyCompatibleStateForegroundColor">#24bf4e</Color>
+        <Color x:Key="ClearlyIncompatibleStateForegroundColor">#c71e2c</Color>
+
+    <!--Brushes-->
+        <!--SolidColorBrushes-->
+            <SolidColorBrush x:Key="ClearlyCompatibleStateForegroundBrush"
+                             Color="{StaticResource ClearlyCompatibleStateForegroundColor}"/>
+            <SolidColorBrush x:Key="ClearlyIncompatibleStateForegroundBrush"
+                             Color="{StaticResource ClearlyIncompatibleStateForegroundColor}"/>
+
+</ResourceDictionary>

@@ -51,8 +51,8 @@ namespace ISFA.MVVM.ViewModels
 		private MainViewModel()
 		{
 			var canCalculate = this
-				.WhenAnyValue(x => x.InitialTable.IsTableEmpty)
-				.Select(isEmpty => !isEmpty);
+				.WhenAnyValue(x => x.InitialTable.IsTableEmpty, x => x.InitialTable.ColumnHeaders.Count, x => x.InitialTable.RowHeaders.Count)
+				.Select(x => !x.Item1 && x.Item2 != 0 && x.Item3 != 0);
 
 			var canClean = this
 				.WhenAnyValue(x => x.InitialTable.IsTableEmpty)

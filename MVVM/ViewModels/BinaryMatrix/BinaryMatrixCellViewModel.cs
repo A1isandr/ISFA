@@ -32,11 +32,12 @@ namespace ISFA.MVVM.ViewModels.BinaryMatrix
 			_foregroundBrush = this
 				.WhenAnyValue(x => x.BinaryMatrixCell)
 				.Select(cell =>
-					cell.IsClearlyCompatible
-						? new SolidColorBrush(Color.FromRgb(0, 255, 0))
-						: cell.IsClearlyIncompatible
-							? new SolidColorBrush(Color.FromRgb(255, 0, 0))
-							: new SolidColorBrush(Color.FromRgb(255, 255, 255)))
+					cell.State switch
+					{
+						BinaryMatrixCell.CellState.ClearlyCompatible => new SolidColorBrush(Color.FromRgb(36, 191, 78)),
+						BinaryMatrixCell.CellState.ClearlyIncompatible => new SolidColorBrush(Color.FromRgb(199, 30, 44)),
+						_ => new SolidColorBrush(Color.FromRgb(255, 255, 255))
+					})
 				.ToProperty(this, x => x.ForegroundBrush);
 		}
 
