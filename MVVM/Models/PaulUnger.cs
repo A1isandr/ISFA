@@ -13,7 +13,9 @@ namespace ISFA.MVVM.Models
 
 		public static List<List<BinaryMatrixCell>> BinaryMatrix { get; private set; } = [];
 
-		public static HashSet<HashSet<int>> CompatibilitySets { get; private set; } = [];
+		public static HashSet<HashSet<int>> InitialCompatibilitySets { get; private set; } = [];
+
+		public static HashSet<HashSet<int>> CorrectMaxCovering { get; private set; } = [];
 
 		#endregion
 
@@ -27,7 +29,7 @@ namespace ISFA.MVVM.Models
 		{
 			States = states;
 			BinaryMatrix = [];
-			CompatibilitySets = [];
+			InitialCompatibilitySets = [];
 
 			// Строим бинарную матрицу.
 			BuildBinaryMatrix();
@@ -49,7 +51,7 @@ namespace ISFA.MVVM.Models
 			// Сравниваем все состояния друг с другом.
 			for (int i = 0; i < columns - 1; i++)
 			{
-				// Заполняем i-тую строку бинарной матрицы нулями.
+				// Добавляем i-тую строку бинарной матрицы.
 				BinaryMatrix.Add(Enumerable.Repeat(new BinaryMatrixCell(), columns - (i + 1)).ToList());
 
 				for (int j = i + 1; j < columns; j++)
@@ -59,18 +61,16 @@ namespace ISFA.MVVM.Models
 					// Проходимся по всем парам переходов/реакций в двух состояниях.
 					for (int k = 0; k < rows; k++)
 					{
-						// Проверяем, явно несовметсимы ли два состояния.
+						// Проверяем, явно ли несовместимы два состояния.
 						if (States[i][k].Reaction != undefinedSymbol &&
 							States[j][k].Reaction != undefinedSymbol &&
 							States[i][k].Reaction != States[j][k].Reaction)
 						{
-							// Если явно несовместимы - ставим ноль в бинарной матрице.
 							BinaryMatrix[i][j - i - 1] = new BinaryMatrixCell(0, CellState.ClearlyIncompatible);
-
 							break;
 						}
 
-						// Проверяем, явно совместимы ли два состояния.
+						// Проверяем, явно ли совместимы два состояния.
 						// ?/? -/-
 						// -/- ?/?
 						// 1/x 1/x
@@ -80,7 +80,7 @@ namespace ISFA.MVVM.Models
 						// 1/? 1/-
 						// -/? ?/-
 						// ?/- -/?
-						// TODO: Это выглядит просто ужасно, надо переписать. Возможно просто вырезать.
+						// TODO: Это выглядит просто ужасно, надо переписать. Возможно, просто вырезать.
 						if ((States[i][k].Transition == undefinedSymbol &&
 							 States[i][k].Reaction == undefinedSymbol) ||
 							(States[j][k].Transition == undefinedSymbol &&
@@ -119,7 +119,7 @@ namespace ISFA.MVVM.Models
 					if (BinaryMatrix[i][j].Value is not null) continue;
 
 					//MessageBox.Show($"Now checking: {i + 1} {j + 1 + i + 1}");
-					BinaryMatrix[i][j] = IsCompatible(i, j) 
+					BinaryMatrix[i][j] = IsCompatible(i, j, []) 
 						? new BinaryMatrixCell(1, CellState.Final)
 						: new BinaryMatrixCell(0, CellState.Final);
 				}
@@ -134,61 +134,85 @@ namespace ISFA.MVVM.Models
 			// Составляем множества совместимости на основе бинарной матрицы.
 			for (int i = 0; i < BinaryMatrix.Count; i++)
 			{
-				CompatibilitySets.Add([i + 1]);
+				InitialCompatibilitySets.Add([i + 1]);
 				
 				for (int j = 0; j < BinaryMatrix[i].Count; j++)
 				{
 					if (BinaryMatrix[i][j].Value == 1)
 					{
-						CompatibilitySets.Last().Add(j + 1 + i + 1);
+						InitialCompatibilitySets.Last().Add(j + 1 + i + 1);
 					}
 				}
 			}
 
-			// Проверяем, чтобы множества не содержались друг в друге.
-            CheckForSubsets();
+			CorrectMaxCovering = [..InitialCompatibilitySets];
 
-            HashSet<HashSet<HashSet<int>>> incompatibleSets = [];
+			HashSet<HashSet<HashSet<int>>> incompatibleSets = [];
 
 			// Проверяем множества на наличие несовместимых состояний.
-			foreach (var set in CompatibilitySets)
+			foreach (var set in CorrectMaxCovering)
 			{
 				incompatibleSets.Add(FindIncompatibleStates(set));
 			}
 
-			if (incompatibleSets.All(set => set.Count == 0)) return;
+			// Дробление множеств
+			for (int i = 0; i < CorrectMaxCovering.Count; i++)
+			{
+				var currentSet = CorrectMaxCovering.ElementAt(i);
+				var incompatibleSubsets = incompatibleSets.ElementAt(i);
 
-            for (int i = 0; i < CompatibilitySets.Count; i++)
-            {
-                for (int j = 0; j < incompatibleSets.Count; j++)
-                {
-					CompatibilitySets.ElementAt(i).ExceptWith(incompatibleSets.ElementAt(i).ElementAt(j));
+				if (incompatibleSubsets.Count == 0) continue;
 
-                }
-            }
+				// Разбиваем множество на подмножества, исключая несовместимые пары
+				List<HashSet<int>> newSubsets = new List<HashSet<int>>();
+				foreach (var incompatiblePair in incompatibleSubsets)
+				{
+					foreach (var elementToRemove in incompatiblePair)
+					{
+						var newSubset = new HashSet<int>(currentSet);
+						newSubset.Remove(elementToRemove);
+						newSubsets.Add(newSubset);
+					}
+				}
 
+				// Заменяем исходное множество новыми подмножествами
+				CorrectMaxCovering.Remove(currentSet);
+				CorrectMaxCovering.UnionWith(newSubsets);
+			}
 
+			// Поглощение множеств
+			bool changesMade;
+			do
+			{
+				changesMade = false;
+				for (int i = 0; i < CorrectMaxCovering.Count; i++)
+				{
+					for (int j = i + 1; j < CorrectMaxCovering.Count; j++)
+					{
+						var set1 = CorrectMaxCovering.ElementAt(i);
+						var set2 = CorrectMaxCovering.ElementAt(j);
 
+						if (set1.IsSubsetOf(set2))
+						{
+							CorrectMaxCovering.Remove(set1);
+							changesMade = true;
+							break;
+						}
+						else if (set2.IsSubsetOf(set1))
+						{
+							CorrectMaxCovering.Remove(set2);
+							changesMade = true;
+							break;
+						}
+					}
+
+					if (changesMade) break; // Restart outer loop after a change
+				}
+			} while (changesMade);
 		}
 
-        private static void CheckForSubsets()
-        {
-            for (int i = 0; i < CompatibilitySets.Count; i++)
-            {
-                for (int j = 0; j < CompatibilitySets.Count; j++)
-                {
-                    if (!CompatibilitySets.ElementAt(i).IsSupersetOf(CompatibilitySets.ElementAt(j))) continue;
-
-                    CompatibilitySets.Remove(CompatibilitySets.ElementAt(j));
-					CheckForSubsets();
-
-					return;
-                }
-            }
-        }
-
 		/// <summary>
-		/// Поиск несовместимых состояний.
+		/// Поиск несовместимых состояний в блоках совместимости.
 		/// </summary>
 		/// <param name="set"></param>
 		/// <returns></returns>
@@ -196,37 +220,7 @@ namespace ISFA.MVVM.Models
 		{
 			HashSet<HashSet<int>> incompatibleSets = [];
 
-			MessageBox.Show($"Checking: {string.Join(", ", set)}");
-
-			//for (int i = 0; i < set.Count - 1; i++)
-			//{
-			//	for (int j = i + 1; j < set.Count; j++)
-			//	{
-			//		MessageBox.Show($"Checking: {set.ElementAt(i)} {set.ElementAt(j)}");
-
-			//		(int row, int column) = StateToBinaryMatrixCoords(set.ElementAt(i), set.ElementAt(j));
-			//		if (BinaryMatrix[row][column].Value == 1) continue;
-
-			//		incompatibleSets.Add([set.ElementAt(i), set.ElementAt(j)]);
-			//	}
-			//}
-
-			//MessageBox.Show($"Found {incompatibleSets.Count} incompatible sets");
-
-			//for (int i = 0; i < incompatibleSets.Count; i++)
-			//{
-			//	for (int j = i + 1; j < incompatibleSets.ElementAt(i).Count; j++)
-			//	{
-			//		MessageBox.Show($"Checking: {incompatibleSets.ElementAt(i)} {incompatibleSets.ElementAt(j)}");
-
-			//		if (incompatibleSets.ElementAt(i).Overlaps(incompatibleSets.ElementAt(j)))
-			//		{
-			//			incompatibleSets.ElementAt(i).SymmetricExceptWith(incompatibleSets.ElementAt(j));
-
-			//			MessageBox.Show($"Incompatible sets: {string.Join(", ", incompatibleSets)}");
-			//		}
-			//	}
-			//}
+			//MessageBox.Show($"Checking: {string.Join(", ", set)}");
 
 			// Находим все множества, которые можно вынести из блока.
 			for (int i = 1; i < set.Count - 1; i++)
@@ -250,23 +244,20 @@ namespace ISFA.MVVM.Models
 		/// </summary>
 		/// <param name="row"></param>
 		/// <param name="column"></param>
+		/// <param name="chain"></param>
 		/// <returns></returns>
-		private static bool IsCompatible(int row, int column)
+		private static bool IsCompatible(int row, int column, HashSet<(int, int)> chain)
 		{
-			// TODO: Рассмотреть возможные петли.
+			if (BinaryMatrix[row][column].Value == 1) return true;
+			if (BinaryMatrix[row][column].State == CellState.ClearlyIncompatible) return false;
+
+			// Если образовалась петля - возвращаем true;
+			if (chain.Contains((row, column))) return true;
 
 			var state1 = States[row];
 			var state2 = States[column + row + 1];
 
-			if (BinaryMatrix[row][column].State == CellState.ClearlyCompatible)
-			{
-				return true;
-			}
-			if (BinaryMatrix[row][column].State == CellState.ClearlyIncompatible)
-			{
-				return false;
-			}
-
+			// Проходимся по всем парам переходов/реакций в двух состояниях.
 			for (int k = 0; k < state1.Count; k++)
 			{
 				// Если переходы не определены - пропускаем.
@@ -279,20 +270,23 @@ namespace ISFA.MVVM.Models
 				//MessageBox.Show($"{row + 1} {column + 1 + row + 1} -> {state1[k].Transition} {state2[k].Transition}");
 
 				(int newRow, int newColumn) = StateToBinaryMatrixCoords(Convert.ToInt32(state1[k].Transition), Convert.ToInt32(state2[k].Transition));
+				chain.Add((row, column));
 
-				// Если состояние переходит в само себя - пропускаем, чтобы не образовалась петля.
-				if ((newRow == row && newColumn == column) ||
-				    (newRow == column && newColumn == row)) continue;
-
-				//MessageBox.Show($"Recursive checking: {state1[k].Transition} {state2[k].Transition} {IsCompatible(newRow, newColumn)}");
-
-				// Проверяем совместимость двух состояний.
-				return IsCompatible(newRow, newColumn);
+				if (!IsCompatible(newRow, newColumn, chain))
+				{
+					return false;
+				}
 			}
 
 			return true;
 		}
 
+		/// <summary>
+		/// Преобразует координаты в формат бинарной матрицы.
+		/// </summary>
+		/// <param name="state1Coords"></param>
+		/// <param name="state2Coords"></param>
+		/// <returns></returns>
 		private static (int row, int column) StateToBinaryMatrixCoords(int state1Coords, int state2Coords)
         {
             state1Coords--;

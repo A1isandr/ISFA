@@ -47,10 +47,15 @@ namespace ISFA.MVVM.Views
 					.DisposeWith(disposables);
 
                 this.OneWayBind(ViewModel,
-                    viewModel => viewModel.Sets,
-                    view => view.Sets.ItemsSource)
+                    viewModel => viewModel.InitialCompatibilitySets,
+                    view => view.InitialCompatibilitySets.ItemsSource)
                     .DisposeWith(disposables);
-            });
+
+                this.OneWayBind(ViewModel,
+		                viewModel => viewModel.CorrectMaxCovering,
+		                view => view.CorrectMaxCoveringCompatibilitySets.ItemsSource)
+	                .DisposeWith(disposables);
+			});
         }
     }
 }

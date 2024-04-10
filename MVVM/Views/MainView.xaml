@@ -79,10 +79,9 @@
                 
                 <StackPanel x:Name="BinaryMatrix"
                     Orientation="Vertical"
-                    Margin="0, 0, 0, 10">
+                    Margin="0, 0, 0, 20">
 
                     <Label
-                        DockPanel.Dock="Top"
                         Content="Бинарная матрица:"
                         FontSize="14"
                         FontWeight="Medium"
@@ -102,23 +101,72 @@
                         </binaryMatrix:BinaryMatrixView.Effect>
                     </binaryMatrix:BinaryMatrixView>
                 </StackPanel>
+                
+                <StackPanel
+                    Orientation="Vertical"
+                    HorizontalAlignment="Center"
+                    Margin="0, 0, 0, 20">
 
-                <ItemsControl x:Name="Sets">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <StackPanel
-                                Orientation="Vertical"/>
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
+                    <Label
+                        Content="Первоначальные множества:"
+                        FontSize="14"
+                        FontWeight="Medium"
+                        HorizontalAlignment="Center"
+                        Margin="0, 0, 0, 10"/>
 
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <TextBlock
-                                Text="{Binding}"
-                                Foreground="White"/>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
+                    <ItemsControl x:Name="InitialCompatibilitySets">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel
+                                    Orientation="Vertical"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock
+                                    Text="{Binding}"
+                                    FontSize="20"
+                                    FontWeight="Medium"
+                                    Foreground="White"
+                                    Margin="0, 0, 0, 10"/>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+
+                <StackPanel
+                    Orientation="Vertical"
+                    HorizontalAlignment="Center"
+                    Margin="0, 0, 0, 10">
+
+                    <Label
+                        Content="Максимальное правильное покрытие:"
+                        FontSize="14"
+                        FontWeight="Medium"
+                        HorizontalAlignment="Center"
+                        Margin="0, 0, 0, 10"/>
+
+                    <ItemsControl x:Name="CorrectMaxCoveringCompatibilitySets">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel
+                                    Orientation="Vertical"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock
+                                    Text="{Binding}"
+                                    FontSize="20"
+                                    FontWeight="Medium"
+                                    Foreground="White"
+                                    Margin="0, 0, 0, 10"/>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
             </StackPanel>
         </ScrollViewer>
 

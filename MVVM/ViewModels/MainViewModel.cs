@@ -5,6 +5,8 @@ using ReactiveUI;
 using System.Collections.ObjectModel;
 using System.Reactive;
 using System.Reactive.Linq;
+using System.Text;
+using ReactiveUI.Fody.Helpers;
 using StateViewModel = ISFA.MVVM.ViewModels.BinaryMatrix.StateViewModel;
 
 namespace ISFA.MVVM.ViewModels
@@ -37,7 +39,11 @@ namespace ISFA.MVVM.ViewModels
 		private readonly ObservableAsPropertyHelper<bool> _isBinaryMatrixVisible;
 		public bool IsBinaryMatrixVisible => _isBinaryMatrixVisible.Value;
 
-        public List<HashSet<int>> Sets { get; set; } = [];
+		[Reactive]
+		public ObservableCollection<string> InitialCompatibilitySets { get; set; } = [];
+
+		[Reactive]
+		public ObservableCollection<string> CorrectMaxCovering { get; set; } = [];
 
         #endregion
 
@@ -75,6 +81,9 @@ namespace ISFA.MVVM.ViewModels
 
 		private async Task PaulUngerMethod()
 		{
+			InitialCompatibilitySets = [];
+			CorrectMaxCovering = [];
+
 			// Заполняем все пустые ячейки.
 			foreach (var state in InitialTable.States)
 			{
@@ -121,9 +130,24 @@ namespace ISFA.MVVM.ViewModels
 
 			BinaryMatrix.BinaryMatrix = binaryMatrix;
 
-            foreach (var compatibilitySet in PaulUnger.CompatibilitySets)
+			// Заполняем совместимые множества.
+            foreach (var compatibilitySet in PaulUnger.InitialCompatibilitySets)
             {
-                Sets.Add(compatibilitySet);
+				StringBuilder sb = new("{");
+				sb.Append(string.Join(", ", compatibilitySet));
+				sb.Append("}");
+
+                InitialCompatibilitySets.Add(sb.ToString());
+            }
+
+            // Заполняем совместимые множества.
+            foreach (var compatibilitySet in PaulUnger.CorrectMaxCovering)
+            {
+	            StringBuilder sb = new("{");
+	            sb.Append(string.Join(", ", compatibilitySet));
+	            sb.Append("}");
+
+	            CorrectMaxCovering.Add(sb.ToString());
             }
 		}
 
