@@ -1,5 +1,6 @@
-﻿using System.Data.Common;
+﻿  using System.Data.Common;
 using System.Windows;
+using Windows.Media.Capture;
 using static ISFA.MVVM.Models.BinaryMatrixCell;
 
 namespace ISFA.MVVM.Models
@@ -32,7 +33,7 @@ namespace ISFA.MVVM.Models
 			BuildBinaryMatrix();
 
 			// Строим правильную максимальную группировку.
-			//BuildCorrectMaxCovering();
+			BuildCorrectMaxCovering();
 		}
 
 		/// <summary>
@@ -144,12 +145,47 @@ namespace ISFA.MVVM.Models
 				}
 			}
 
+			// Проверяем, чтобы множества не содержались друг в друге.
+            CheckForSubsets();
+
+            HashSet<HashSet<HashSet<int>>> incompatibleSets = [];
+
 			// Проверяем множества на наличие несовместимых состояний.
 			foreach (var set in CompatibilitySets)
 			{
-				FindIncompatibleStates(set);
+				incompatibleSets.Add(FindIncompatibleStates(set));
 			}
+
+			if (incompatibleSets.All(set => set.Count == 0)) return;
+
+            for (int i = 0; i < CompatibilitySets.Count; i++)
+            {
+                for (int j = 0; j < incompatibleSets.Count; j++)
+                {
+					CompatibilitySets.ElementAt(i).ExceptWith(incompatibleSets.ElementAt(i).ElementAt(j));
+
+                }
+            }
+
+
+
 		}
+
+        private static void CheckForSubsets()
+        {
+            for (int i = 0; i < CompatibilitySets.Count; i++)
+            {
+                for (int j = 0; j < CompatibilitySets.Count; j++)
+                {
+                    if (!CompatibilitySets.ElementAt(i).IsSupersetOf(CompatibilitySets.ElementAt(j))) continue;
+
+                    CompatibilitySets.Remove(CompatibilitySets.ElementAt(j));
+					CheckForSubsets();
+
+					return;
+                }
+            }
+        }
 
 		/// <summary>
 		/// Поиск несовместимых состояний.
@@ -193,11 +229,11 @@ namespace ISFA.MVVM.Models
 			//}
 
 			// Находим все множества, которые можно вынести из блока.
-			for (int i = 1; i < set.Count; i++)
+			for (int i = 1; i < set.Count - 1; i++)
 			{
 				incompatibleSets.Add([]);
 
-				for (int j = 0; j < set.Count; j++)
+				for (int j = i + 1; j < set.Count; j++)
 				{
 					(int row, int column) = StateToBinaryMatrixCoords(set.ElementAt(i), set.ElementAt(j));
 					if (BinaryMatrix[row][column].Value == 1) continue;
@@ -258,7 +294,10 @@ namespace ISFA.MVVM.Models
 		}
 
 		private static (int row, int column) StateToBinaryMatrixCoords(int state1Coords, int state2Coords)
-		{
+        {
+            state1Coords--;
+			state2Coords--;
+
 			// Проверяем, чтобы state1Coords было меньше state2Coords.
 			if (state1Coords > state2Coords)
 			{
@@ -266,8 +305,8 @@ namespace ISFA.MVVM.Models
 			}
 
 			// Расчитываем координаты в бинарной матрице.
-			int row = state1Coords - 1;
-			int column = state2Coords - 1 - state1Coords - 1;
+			int row = state1Coords;
+			int column = state2Coords - state1Coords - 1;
 
 			return (row, column);
 		}

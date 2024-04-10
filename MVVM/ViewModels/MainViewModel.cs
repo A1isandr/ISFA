@@ -37,7 +37,9 @@ namespace ISFA.MVVM.ViewModels
 		private readonly ObservableAsPropertyHelper<bool> _isBinaryMatrixVisible;
 		public bool IsBinaryMatrixVisible => _isBinaryMatrixVisible.Value;
 
-		#endregion
+        public List<HashSet<int>> Sets { get; set; } = [];
+
+        #endregion
 
 		#region Constructors
 
@@ -118,6 +120,11 @@ namespace ISFA.MVVM.ViewModels
 			}
 
 			BinaryMatrix.BinaryMatrix = binaryMatrix;
+
+            foreach (var compatibilitySet in PaulUnger.CompatibilitySets)
+            {
+                Sets.Add(compatibilitySet);
+            }
 		}
 
 		#endregion

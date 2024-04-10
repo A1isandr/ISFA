@@ -45,6 +45,11 @@ namespace ISFA.MVVM.Views
 						viewModel => viewModel.IsBinaryMatrixVisible,
 						view => view.BinaryMatrix.Visibility)
 					.DisposeWith(disposables);
+
+                this.OneWayBind(ViewModel,
+                    viewModel => viewModel.Sets,
+                    view => view.Sets.ItemsSource)
+                    .DisposeWith(disposables);
             });
         }
     }

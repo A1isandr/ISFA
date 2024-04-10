@@ -102,6 +102,23 @@
                         </binaryMatrix:BinaryMatrixView.Effect>
                     </binaryMatrix:BinaryMatrixView>
                 </StackPanel>
+
+                <ItemsControl x:Name="Sets">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel
+                                Orientation="Vertical"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock
+                                Text="{Binding}"
+                                Foreground="White"/>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
             </StackPanel>
         </ScrollViewer>
 
