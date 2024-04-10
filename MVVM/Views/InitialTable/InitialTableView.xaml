@@ -7,12 +7,13 @@
                                 xmlns:reactiveUi="http://reactiveui.net"
                                 xmlns:misc="clr-namespace:ISFA.Misc"
                                 xmlns:initialTable="clr-namespace:ISFA.MVVM.ViewModels.InitialTable"
+                                xmlns:converters="clr-namespace:ISFA.Misc.Converters"
                                 x:TypeArguments="initialTable:InitialTableViewModel" 
                                 mc:Ignorable="d" 
                                 d:DesignHeight="450" d:DesignWidth="800">
     
     <UserControl.Resources>
-        <misc:RectConverter x:Key="RectConverter"/>
+        <converters:RectConverter x:Key="RectConverter"/>
     </UserControl.Resources>
         
     <Grid>
@@ -213,7 +214,7 @@
                 Height="30"
                 VerticalAlignment="Center"
                 Content="{Binding Source={StaticResource PlusIcon}, Path=Geometry}"
-                Style="{StaticResource TableButton}"
+                Style="{StaticResource TransparentButton}"
                 Margin="10"/>
 
         <Button x:Name="AddColumnButton"
@@ -223,7 +224,7 @@
                 Height="30"
                 VerticalAlignment="Center"
                 Content="{Binding Source={StaticResource PlusIcon}, Path=Geometry}"
-                Style="{StaticResource TableButton}"
+                Style="{StaticResource TransparentButton}"
                 Margin="10"/>
     </Grid>
 </reactiveUi:ReactiveUserControl>

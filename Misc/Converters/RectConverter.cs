@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Data;
 
-namespace ISFA.Misc
+namespace ISFA.Misc.Converters
 {
     /// <summary>
     /// Changes size of ContentControl in MainWindow according to Window dimensions. 

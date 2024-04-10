@@ -7,5 +7,6 @@
         <Setter Property="TextOptions.TextRenderingMode" Value="ClearType"/>
         <Setter Property="TextOptions.TextFormattingMode" Value="Display"/>
         <Setter Property="FontFamily" Value="pack://application:,,,/Resources/Fonts/#NotoSans"/>
+        <Setter Property="Foreground" Value="White"/>
     </Style>
 </ResourceDictionary>

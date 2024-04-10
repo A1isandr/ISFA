@@ -17,6 +17,8 @@
                 <ResourceDictionary Source="/Resources/Styles/TextBlock.xaml"/>
                 <ResourceDictionary Source="/Resources/Styles/TextBox.xaml"/>
                 <ResourceDictionary Source="/Resources/Styles/ScrollViewer.xaml"/>
+                <ResourceDictionary Source="/Resources/Styles/Expander.xaml"/>
+                <ResourceDictionary Source="/Resources/Styles/Border.xaml"/>
 
                 <ResourceDictionary Source="/Resources/Images/SvgImages.xaml"/>
             </ResourceDictionary.MergedDictionaries>

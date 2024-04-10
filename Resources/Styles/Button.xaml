@@ -281,7 +281,7 @@
         </Style.Triggers>
     </Style>
 
-    <Style x:Key="TableButton"
+    <Style x:Key="TransparentButton"
            TargetType="Button"
            BasedOn="{StaticResource SvgButton}">
 

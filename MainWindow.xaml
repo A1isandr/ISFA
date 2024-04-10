@@ -124,8 +124,20 @@
             <Grid Name="Main"
                 Grid.Row="1"
                 Panel.ZIndex="1">
-                
-                <views:MainView/>
+
+                <Expander x:Name="MainViewExpander"
+                          ExpandDirection="Right"
+                          Style="{StaticResource SlideExpander}">
+
+                    <views:MainView x:Name="MainView"/>
+                </Expander>
+
+                <Expander x:Name="HelpViewExpander"
+                          ExpandDirection="Left"
+                          Style="{StaticResource SlideExpander}">
+
+                    <views:HelpView x:Name="HelpView"/>
+                </Expander>
             </Grid>
         </Grid>
     </Border>

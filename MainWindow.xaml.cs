@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Reactive.Disposables;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -9,6 +10,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using ISFA.MVVM.ViewModels;
+using ISFA.MVVM.Views;
+using ReactiveMarbles.ObservableEvents;
 using ReactiveUI;
 
 namespace ISFA
@@ -24,6 +27,41 @@ namespace ISFA
 		public MainWindow()
 		{
 			InitializeComponent();
+
+			ViewModel = new MainWindowViewModel();
+
+			this.WhenActivated(disposables =>
+			{
+				this.OneWayBind(ViewModel,
+						viewModel => viewModel.IsMainViewOpen,
+						view => view.MainViewExpander.IsExpanded)
+					.DisposeWith(disposables);
+
+				this.OneWayBind(ViewModel,
+						viewModel => viewModel.IsHelpViewOpen,
+						view => view.HelpViewExpander.IsExpanded)
+					.DisposeWith(disposables);
+
+				MainView.HelpButton
+					.Events()
+					.Click
+					.Subscribe(e =>
+					{
+						ViewModel.IsMainViewOpen = false;
+						ViewModel.IsHelpViewOpen = true;
+					})
+					.DisposeWith(disposables);
+
+				HelpView.BackButton
+					.Events()
+					.Click
+					.Subscribe(e =>
+					{
+						ViewModel.IsMainViewOpen = true;
+						ViewModel.IsHelpViewOpen = false;
+					})
+					.DisposeWith(disposables);
+			});
 		}
 
 		private void Header_MouseDown(object sender, MouseButtonEventArgs e)

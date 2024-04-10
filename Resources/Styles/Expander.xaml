@@ -1,0 +1,153 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:system="clr-namespace:System;assembly=System.Runtime"
+                    xmlns:converters="clr-namespace:YetAnotherMessenger.Misc.Converters"
+                    xmlns:converters1="clr-namespace:ISFA.Misc.Converters">
+
+    <Style x:Key="SlideExpander"
+       TargetType="Expander">
+
+        <Style.Resources>
+            <converters1:ExpanderTranslateTransformXConverter x:Key="ExpanderTranslateTransformXConverter"/>
+            <converters:ExpanderTranslateTransformYConverter x:Key="ExpanderTranslateTransformYConverter"/>
+        </Style.Resources>
+
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate
+                    TargetType="Expander">
+
+                    <Border x:Name="ExpanderContentBorder">
+
+                        <ContentPresenter x:Name="ExpanderContent"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch">
+
+                            <ContentPresenter.Tag>
+                                <system:Double>1.0</system:Double>
+                            </ContentPresenter.Tag>
+
+                            <ContentPresenter.RenderTransformOrigin>
+                                <Point 
+                                    X="0.5" 
+                                    Y="0.5"/>
+                            </ContentPresenter.RenderTransformOrigin>
+
+                            <ContentPresenter.RenderTransform>
+                                <TransformGroup>
+                                    <TranslateTransform>
+                                        <TranslateTransform.X>
+                                            <MultiBinding Converter="{StaticResource ExpanderTranslateTransformXConverter}">
+                                                <Binding Path="ActualWidth" RelativeSource="{RelativeSource FindAncestor, AncestorType=Border}"/>
+                                                <Binding Path="Tag" RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType=ContentPresenter}"/>
+                                                <Binding Path="ExpandDirection" RelativeSource="{RelativeSource TemplatedParent}"/>
+                                            </MultiBinding>
+                                        </TranslateTransform.X>
+
+                                        <TranslateTransform.Y>
+                                            <MultiBinding Converter="{StaticResource ExpanderTranslateTransformYConverter}">
+                                                <Binding Path="ActualHeight" RelativeSource="{RelativeSource FindAncestor, AncestorType=Border}"/>
+                                                <Binding Path="Tag" RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType=ContentPresenter}"/>
+                                                <Binding Path="ExpandDirection" RelativeSource="{RelativeSource TemplatedParent}"/>
+                                            </MultiBinding>
+                                        </TranslateTransform.Y>
+                                    </TranslateTransform>
+
+                                    <ScaleTransform x:Name="ScaleTransform"
+                                        ScaleX="1"
+                                        ScaleY="1"/>
+                                </TransformGroup>
+                            </ContentPresenter.RenderTransform>
+                        </ContentPresenter>
+                    </Border>
+
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsExpanded" Value="True">
+                            <Trigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation 
+                                            Storyboard.TargetName="ExpanderContent"
+                                            Storyboard.TargetProperty="Tag"
+                                            To="0"
+                                            Duration="0:0:0.5"
+                                            BeginTime="0:0:0.3">
+
+                                            <DoubleAnimation.EasingFunction>
+                                                <ExponentialEase EasingMode="EaseInOut"/>
+                                            </DoubleAnimation.EasingFunction>
+                                        </DoubleAnimation>
+
+                                        <DoubleAnimation
+                                            Storyboard.TargetName="ScaleTransform"
+                                            Storyboard.TargetProperty="ScaleX"
+                                            To="1"
+                                            Duration="0:0:0.3"
+                                            BeginTime="0:0:0.8">
+
+                                            <DoubleAnimation.EasingFunction>
+                                                <ExponentialEase EasingMode="EaseInOut"/>
+                                            </DoubleAnimation.EasingFunction>
+                                        </DoubleAnimation>
+
+                                        <DoubleAnimation
+                                            Storyboard.TargetName="ScaleTransform"
+                                            Storyboard.TargetProperty="ScaleY"
+                                            To="1"
+                                            Duration="0:0:0.3"
+                                            BeginTime="0:0:0.8">
+
+                                            <DoubleAnimation.EasingFunction>
+                                                <ExponentialEase EasingMode="EaseInOut"/>
+                                            </DoubleAnimation.EasingFunction>
+                                        </DoubleAnimation>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.EnterActions>
+
+                            <Trigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation
+                                            Storyboard.TargetName="ScaleTransform"
+                                            Storyboard.TargetProperty="ScaleX"
+                                            To="0.9"
+                                            Duration="0:0:0.3">
+
+                                            <DoubleAnimation.EasingFunction>
+                                                <ExponentialEase EasingMode="EaseInOut"/>
+                                            </DoubleAnimation.EasingFunction>
+                                        </DoubleAnimation>
+
+                                        <DoubleAnimation
+                                            Storyboard.TargetName="ScaleTransform"
+                                            Storyboard.TargetProperty="ScaleY"
+                                            To="0.9"
+                                            Duration="0:0:0.3">
+
+                                            <DoubleAnimation.EasingFunction>
+                                                <ExponentialEase EasingMode="EaseInOut"/>
+                                            </DoubleAnimation.EasingFunction>
+                                        </DoubleAnimation>
+
+                                        <DoubleAnimation
+                                            Storyboard.TargetName="ExpanderContent"
+                                            Storyboard.TargetProperty="Tag"
+                                            To="1"
+                                            Duration="0:0:0.5"
+                                            BeginTime="0:0:0.3">
+
+                                            <DoubleAnimation.EasingFunction>
+                                                <ExponentialEase EasingMode="EaseInOut"/>
+                                            </DoubleAnimation.EasingFunction>
+                                        </DoubleAnimation>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.ExitActions>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>

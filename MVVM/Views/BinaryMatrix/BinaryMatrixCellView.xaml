@@ -14,7 +14,6 @@
     <Label x:Name="Value"
         FontSize="20"
         FontWeight="Medium"
-        Foreground="White"
         HorizontalContentAlignment="Center"
         VerticalContentAlignment="Center"
         BorderThickness="1"

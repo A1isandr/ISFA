@@ -19,6 +19,9 @@
     <Compile Update="MVVM\Views\HeaderView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="MVVM\Views\HelpView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="MVVM\Views\InitialTable\InitialTableView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -48,6 +51,9 @@
     <Page Update="MVVM\Views\HeaderView.xaml">
       <SubType>Designer</SubType>
     </Page>
+    <Page Update="MVVM\Views\HelpView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="MVVM\Views\InitialTable\InitialTableView.xaml">
       <SubType>Designer</SubType>
     </Page>
@@ -75,7 +81,13 @@
     <Page Update="Resources\Images\SvgImages.xaml">
       <SubType>Designer</SubType>
     </Page>
+    <Page Update="Resources\Styles\Border.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="Resources\Styles\Button.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Resources\Styles\Expander.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Resources\Styles\Label.xaml">

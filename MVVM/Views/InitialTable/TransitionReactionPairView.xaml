@@ -27,6 +27,7 @@
             <TextBox x:Name="Transition"
                 Grid.Column="0"
                 HorizontalContentAlignment="Center"
+                Foreground="White"
                 Style="{StaticResource CommonTextBox}"
                 Padding="0"/>
                 
@@ -35,12 +36,12 @@
                 Content="/"
                 FontSize="20"
                 FontWeight="Medium"
-                Foreground="White"
                 VerticalAlignment="Center"/>
 
             <TextBox x:Name="Reaction"
                 Grid.Column="2"
                 HorizontalContentAlignment="Center"
+                Foreground="White"
                 Style="{StaticResource CommonTextBox}"
                 Padding="0"/>
         </Grid>
