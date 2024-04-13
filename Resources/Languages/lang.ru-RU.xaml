@@ -1,0 +1,37 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:v="clr-namespace:System;assembly=mscorlib">
+
+    <!--MainView-->
+        <v:String x:Key="MainViewInitialTableTitle">Исходные данные:</v:String>
+        <v:String x:Key="MainViewBinaryMatrixTitle">Бинарная матрица:</v:String>
+        <v:String x:Key="MainViewCalculateButtonText">Рассчитать</v:String>
+        <v:String x:Key="MainViewClearButtonText">Очистить</v:String>
+
+        <!--InitialTable-->
+            <v:String x:Key="InitialTableEmptyTableText">Добавьте столбцы и строки с помошью кнопки '+'.</v:String>
+
+        <!--BinaryMatrix-->
+            <v:String x:Key="BinaryMatrixBlocksTitleText">Блоки</v:String>
+
+    <!--HelpView-->
+        <v:String x:Key="HelpViewTitle">Справка</v:String>
+
+        <!--OverviewBlock-->
+            <v:String x:Key="HelpViewOverviewBlockTitle">Общие сведения:</v:String>
+        
+        <!--BinaryMatrixBlock-->
+            <v:String x:Key="HelpViewBinaryMatrixBlockTitle">Бинарная матрица:</v:String>
+            <v:String x:Key="HelpViewBinaryMatrixBlockClearlyCompatibleStatesColor">Зеленый</v:String>
+            <v:String x:Key="HelpViewBinaryMatrixBlockClearlyCompatibleStates">— явно совместимые состояния.</v:String>
+            <v:String x:Key="HelpViewBinaryMatrixBlockClearlyIncompatibleStatesColor">Красный</v:String>
+            <v:String x:Key="HelpViewBinaryMatrixBlockClearlyIncompatibleStates">— явно несовместимые состояния.</v:String>
+        
+        <!--SpecialThanks-->
+            <v:String x:Key="HelpViewSpecialThanksTitle">Благодарности:</v:String>
+            <v:String x:Key="HelpViewSpecialThanksContributor1Name">Чернышев Артем</v:String>
+            <v:String x:Key="HelpViewSpecialThanksContributor1Description">— помощь с алгоритмом построения максимального правильного покрытия.</v:String>
+
+        <!--Copyright-->
+            <v:String x:Key="HelpViewCopyrightText">© 2024 Александр Пиданов. Все права защищены.</v:String>
+</ResourceDictionary>

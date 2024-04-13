@@ -50,14 +50,15 @@
                 </Grid.RowDefinitions>
 
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition MaxWidth="50" MinWidth="60"/>
+                    <ColumnDefinition x:Name="TableColumn"/>
+                    <ColumnDefinition MaxWidth="60" MinWidth="40"/>
+                    <ColumnDefinition x:Name="BlocksColumn"  Width="1*" MinWidth="100"/>
                 </Grid.ColumnDefinitions>
 
                 <Line
                     Grid.Row="0"
                     Grid.Column="0"
-                    Grid.ColumnSpan="2"
+                    Grid.ColumnSpan="3"
                     X1="0" 
                     Y1="0"
                     X2="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Border}}, Path=ActualWidth}" 
@@ -70,6 +71,18 @@
                     Grid.Row="0"
                     Grid.RowSpan="2"
                     Grid.Column="0"
+                    X1="0" 
+                    Y1="0"
+                    X2="0" 
+                    Y2="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Border}}, Path=ActualHeight}"
+                    Stroke="{StaticResource TableBorderBrush}"
+                    StrokeThickness="1"
+                    HorizontalAlignment="Right"/>
+
+                <Line
+                    Grid.Row="0"
+                    Grid.RowSpan="2"
+                    Grid.Column="1"
                     X1="0" 
                     Y1="0"
                     X2="0" 
@@ -159,8 +172,7 @@
                     <ScrollViewer x:Name="TableScrollViewer"
                           HorizontalScrollBarVisibility="Auto"
                           VerticalScrollBarVisibility="Auto"
-                          Style="{StaticResource CommonScrollViewer}"
-                          ScrollChanged="TableScrollViewer_OnScrollChanged">
+                          Style="{StaticResource CommonScrollViewer}">
 
                         <ItemsControl x:Name="Columns"
                               HorizontalAlignment="Right">
@@ -171,6 +183,68 @@
                                         Orientation="Vertical"/>
                                 </ItemsPanelTemplate>
                             </ItemsControl.ItemsPanel>
+                        </ItemsControl>
+                    </ScrollViewer>
+                </Border>
+                
+                <Grid
+                    Grid.Row="0"
+                    Grid.Column="1">
+
+                    <Button x:Name="ExpandBlocksButton"
+                        Width="20"
+                        Height="20"
+                        Content="{Binding Source={StaticResource ChevronLeftIcon},Path=Geometry}"
+                        HorizontalAlignment="Left"
+                        Style="{StaticResource TransparentButton}"
+                        Margin="5, 0, 0, 0"/>
+
+                    <Button x:Name="ExpandTableButton"
+                        Width="20"
+                        Height="20"
+                        Content="{Binding Source={StaticResource ChevronRightIcon},Path=Geometry}"
+                        HorizontalAlignment="Right"
+                        Style="{StaticResource TransparentButton}"
+                        Margin="0, 0, 5, 0"/>
+                </Grid>
+
+                <Label
+                    Grid.Row="0"
+                    Grid.Column="2"
+                    Content="{StaticResource BinaryMatrixBlocksTitleText}"
+                    FontSize="20"
+                    FontWeight="Medium"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"/>
+                    
+                <Border
+                    Grid.Column="2"
+                    Grid.Row="1">
+
+                    <ScrollViewer x:Name="BlocksScrollViewer"
+                                  HorizontalScrollBarVisibility="Auto"
+                                  VerticalScrollBarVisibility="Auto"
+                                  Style="{StaticResource CommonScrollViewer}">
+
+                        <ItemsControl x:Name="Blocks">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel
+                                        Orientation="Vertical"/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Label
+                                        Height="50"
+                                        Content="{Binding}"
+                                        FontSize="20"
+                                        FontWeight="Medium"
+                                        Foreground="White"
+                                        VerticalContentAlignment="Center"/>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
                         </ItemsControl>
                     </ScrollViewer>
                 </Border>

@@ -23,7 +23,7 @@
 
                     <Label
                         DockPanel.Dock="Top"
-                        Content="Исходные данные:"
+                        Content="{StaticResource MainViewInitialTableTitle}"
                         FontSize="14"
                         FontWeight="Medium"
                         HorizontalAlignment="Center"
@@ -55,7 +55,7 @@
                         Margin="0, 0, 20, 0">
 
                         <TextBlock
-                            Text="Построить"
+                            Text="{StaticResource MainViewCalculateButtonText}"
                             FontSize="20"
                             FontWeight="Medium"
                             Foreground="{StaticResource AccentBrush1}"
@@ -69,103 +69,72 @@
                         Style="{StaticResource CommonButton}">
 
                         <TextBlock
-                            Text="Очистить"
+                            Text="{StaticResource MainViewClearButtonText}"
                             FontSize="20"
                             FontWeight="Medium"
                             Foreground="White"
                             HorizontalAlignment="Center"/>
                     </Button>
                 </StackPanel>
-                
-                <StackPanel x:Name="BinaryMatrix"
-                    Orientation="Vertical"
-                    Margin="0, 0, 0, 20">
 
-                    <Label
-                        Content="Бинарная матрица:"
-                        FontSize="14"
-                        FontWeight="Medium"
+                <StackPanel x:Name="ResultsStackPanel">
+                    <StackPanel x:Name="BinaryMatrix"
+                                Orientation="Vertical"
+                                Margin="0, 0, 0, 20">
+
+                        <Label
+                            Content="{StaticResource MainViewBinaryMatrixTitle}"
+                            FontSize="14"
+                            FontWeight="Medium"
+                            HorizontalAlignment="Center"
+                            Margin="0, 0, 0, 10"/>
+
+                        <binaryMatrix:BinaryMatrixView
+                            Height="400"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Margin="30, 0, 30, 0">
+
+                            <binaryMatrix:BinaryMatrixView.Effect>
+                                <DropShadowEffect
+                                    ShadowDepth="0"
+                                    BlurRadius="30"/>
+                            </binaryMatrix:BinaryMatrixView.Effect>
+                        </binaryMatrix:BinaryMatrixView>
+                    </StackPanel>
+
+                    <StackPanel
+                        Orientation="Vertical"
                         HorizontalAlignment="Center"
-                        Margin="0, 0, 0, 10"/>
+                        Margin="0, 0, 0, 10">
 
-                    <binaryMatrix:BinaryMatrixView
-                        Height="400"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Center"
-                        Margin="30, 0, 30, 0">
+                        <Label
+                            Content="Максимальное правильное покрытие:"
+                            FontSize="14"
+                            FontWeight="Medium"
+                            HorizontalAlignment="Center"
+                            Margin="0, 0, 0, 10"/>
 
-                        <binaryMatrix:BinaryMatrixView.Effect>
-                            <DropShadowEffect
-                                ShadowDepth="0"
-                                BlurRadius="30"/>
-                        </binaryMatrix:BinaryMatrixView.Effect>
-                    </binaryMatrix:BinaryMatrixView>
-                </StackPanel>
-                
-                <StackPanel
-                    Orientation="Vertical"
-                    HorizontalAlignment="Center"
-                    Margin="0, 0, 0, 20">
+                        <ItemsControl x:Name="CorrectMaxCoveringCompatibilitySets">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel
+                                        Orientation="Vertical"/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
 
-                    <Label
-                        Content="Первоначальные множества:"
-                        FontSize="14"
-                        FontWeight="Medium"
-                        HorizontalAlignment="Center"
-                        Margin="0, 0, 0, 10"/>
-
-                    <ItemsControl x:Name="InitialCompatibilitySets">
-                        <ItemsControl.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <StackPanel
-                                    Orientation="Vertical"/>
-                            </ItemsPanelTemplate>
-                        </ItemsControl.ItemsPanel>
-
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <TextBlock
-                                    Text="{Binding}"
-                                    FontSize="20"
-                                    FontWeight="Medium"
-                                    Foreground="White"
-                                    Margin="0, 0, 0, 10"/>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-                </StackPanel>
-
-                <StackPanel
-                    Orientation="Vertical"
-                    HorizontalAlignment="Center"
-                    Margin="0, 0, 0, 10">
-
-                    <Label
-                        Content="Максимальное правильное покрытие:"
-                        FontSize="14"
-                        FontWeight="Medium"
-                        HorizontalAlignment="Center"
-                        Margin="0, 0, 0, 10"/>
-
-                    <ItemsControl x:Name="CorrectMaxCoveringCompatibilitySets">
-                        <ItemsControl.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <StackPanel
-                                    Orientation="Vertical"/>
-                            </ItemsPanelTemplate>
-                        </ItemsControl.ItemsPanel>
-
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <TextBlock
-                                    Text="{Binding}"
-                                    FontSize="20"
-                                    FontWeight="Medium"
-                                    Foreground="White"
-                                    Margin="0, 0, 0, 10"/>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock
+                                        Text="{Binding}"
+                                        FontSize="20"
+                                        FontWeight="Medium"
+                                        Foreground="White"
+                                        Margin="0, 0, 0, 10"/>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
                 </StackPanel>
             </StackPanel>
         </ScrollViewer>

@@ -6,6 +6,7 @@ using System.Collections.ObjectModel;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Text;
+using System.Windows;
 using ReactiveUI.Fody.Helpers;
 using StateViewModel = ISFA.MVVM.ViewModels.BinaryMatrix.StateViewModel;
 
@@ -40,9 +41,6 @@ namespace ISFA.MVVM.ViewModels
 		public bool IsBinaryMatrixVisible => _isBinaryMatrixVisible.Value;
 
 		[Reactive]
-		public ObservableCollection<string> InitialCompatibilitySets { get; set; } = [];
-
-		[Reactive]
 		public ObservableCollection<string> CorrectMaxCovering { get; set; } = [];
 
         #endregion
@@ -52,7 +50,9 @@ namespace ISFA.MVVM.ViewModels
 		private MainViewModel()
 		{
 			var canCalculate = this
-				.WhenAnyValue(x => x.InitialTable.IsTableEmpty, x => x.InitialTable.ColumnHeaders.Count, x => x.InitialTable.RowHeaders.Count)
+				.WhenAnyValue(x => x.InitialTable.IsTableEmpty, 
+					x => x.InitialTable.ColumnHeaders.Count, 
+					x => x.InitialTable.RowHeaders.Count)
 				.Select(x => !x.Item1 && x.Item2 != 0 && x.Item3 != 0);
 
 			var canClean = this
@@ -60,6 +60,9 @@ namespace ISFA.MVVM.ViewModels
 				.Select(isEmpty => !isEmpty);
 
 			CalculateCommand = ReactiveCommand.CreateFromTask(PaulUngerMethod, canCalculate);
+
+			CalculateCommand.ThrownExceptions
+				.Subscribe(ex => MessageBox.Show($"{ex.Message}\n{ex.InnerException}\n{ex.StackTrace}"));
 
 			CleanCommand = ReactiveCommand.CreateFromObservable<Unit, Unit>(_ =>
 			{
@@ -81,8 +84,8 @@ namespace ISFA.MVVM.ViewModels
 
 		private async Task PaulUngerMethod()
 		{
-			InitialCompatibilitySets = [];
 			CorrectMaxCovering = [];
+			BinaryMatrix.InitialCompatibilitySets = [];
 
 			// Заполняем все пустые ячейки.
 			foreach (var state in InitialTable.States)
@@ -135,9 +138,9 @@ namespace ISFA.MVVM.ViewModels
             {
 				StringBuilder sb = new("{");
 				sb.Append(string.Join(", ", compatibilitySet));
-				sb.Append("}");
+				sb.Append('}');
 
-                InitialCompatibilitySets.Add(sb.ToString());
+                BinaryMatrix.InitialCompatibilitySets.Add(sb.ToString());
             }
 
             // Заполняем совместимые множества.
@@ -145,7 +148,7 @@ namespace ISFA.MVVM.ViewModels
             {
 	            StringBuilder sb = new("{");
 	            sb.Append(string.Join(", ", compatibilitySet));
-	            sb.Append("}");
+	            sb.Append('}');
 
 	            CorrectMaxCovering.Add(sb.ToString());
             }

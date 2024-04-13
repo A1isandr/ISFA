@@ -21,6 +21,8 @@
                 <ResourceDictionary Source="/Resources/Styles/Border.xaml"/>
 
                 <ResourceDictionary Source="/Resources/Images/SvgImages.xaml"/>
+
+                <ResourceDictionary Source="/Resources/Languages/lang.ru-RU.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

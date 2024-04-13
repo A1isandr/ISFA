@@ -63,7 +63,7 @@
                                             Duration="0:0:0">
 
                                             <DoubleAnimation.EasingFunction>
-                                                <CubicEase
+                                                <ExponentialEase
                                                     EasingMode="EaseInOut"/>
                                             </DoubleAnimation.EasingFunction>
                                         </DoubleAnimation>
@@ -80,7 +80,7 @@
                                             Duration="0:0:0.5">
 
                                             <ColorAnimation.EasingFunction>
-                                                <CubicEase
+                                                <ExponentialEase
                                                     EasingMode="EaseInOut"/>
                                             </ColorAnimation.EasingFunction>
                                         </ColorAnimation>
@@ -91,7 +91,7 @@
                                             Duration="0:0:0.5">
 
                                             <DoubleAnimation.EasingFunction>
-                                                <CubicEase
+                                                <ExponentialEase
                                                     EasingMode="EaseInOut"/>
                                             </DoubleAnimation.EasingFunction>
                                         </DoubleAnimation>
@@ -118,24 +118,42 @@
             </Setter.Value>
         </Setter>
 
+        <Setter Property="RenderTransformOrigin">
+            <Setter.Value>
+                <Point 
+                    X="0.5" 
+                    Y="0.5"/>
+            </Setter.Value>
+        </Setter>
+
         <Style.Triggers>
             <EventTrigger RoutedEvent="PreviewMouseDown">
                 <BeginStoryboard>
                     <Storyboard>
-                        <DoubleAnimation Storyboard.TargetProperty="RenderTransform.ScaleX"
-                                         To="0.9" Duration="0:0:0.1"/>
-                        <DoubleAnimation Storyboard.TargetProperty="RenderTransform.ScaleY"
-                                         To="0.9" Duration="0:0:0.1"/>
+                        <DoubleAnimation 
+                            Storyboard.TargetProperty="RenderTransform.ScaleX"
+                            To="0.9" 
+                            Duration="0:0:0.1"/>
+
+                        <DoubleAnimation 
+                            Storyboard.TargetProperty="RenderTransform.ScaleY"
+                            To="0.9" 
+                            Duration="0:0:0.1"/>
                     </Storyboard>
                 </BeginStoryboard>
             </EventTrigger>
             <EventTrigger RoutedEvent="PreviewMouseUp">
                 <BeginStoryboard>
                     <Storyboard>
-                        <DoubleAnimation Storyboard.TargetProperty="RenderTransform.ScaleX"
-                                         To="1" Duration="0:0:0.1"/>
-                        <DoubleAnimation Storyboard.TargetProperty="RenderTransform.ScaleY"
-                                         To="1" Duration="0:0:0.1"/>
+                        <DoubleAnimation 
+                            Storyboard.TargetProperty="RenderTransform.ScaleX"
+                            To="1" 
+                            Duration="0:0:0.1"/>
+
+                        <DoubleAnimation 
+                            Storyboard.TargetProperty="RenderTransform.ScaleY"
+                            To="1" 
+                            Duration="0:0:0.1"/>
                     </Storyboard>
                 </BeginStoryboard>
             </EventTrigger>
@@ -230,7 +248,7 @@
                             Duration="0:0:0.3">
 
                             <ColorAnimation.EasingFunction>
-                                <CubicEase EasingMode="EaseOut"></CubicEase>
+                                <ExponentialEase EasingMode="EaseOut"/>
                             </ColorAnimation.EasingFunction>
                         </ColorAnimation>
 
@@ -240,7 +258,7 @@
                             Duration="0:0:0.3">
 
                             <DoubleAnimation.EasingFunction>
-                                <CubicEase EasingMode="EaseOut"/>
+                                <ExponentialEase EasingMode="EaseOut"/>
                             </DoubleAnimation.EasingFunction>
                         </DoubleAnimation>
                     </Storyboard>
@@ -256,17 +274,17 @@
                             Duration="0:0:0.3">
 
                             <ColorAnimation.EasingFunction>
-                                <CubicEase EasingMode="EaseOut"></CubicEase>
+                                <ExponentialEase EasingMode="EaseOut"/>
                             </ColorAnimation.EasingFunction>
                         </ColorAnimation>
 
                         <DoubleAnimation
                             Storyboard.TargetProperty="Effect.BlurRadius"
-                            To="20" 
+                            To="10" 
                             Duration="0:0:0.3">
 
                             <DoubleAnimation.EasingFunction>
-                                <CubicEase EasingMode="EaseOut"/>
+                                <ExponentialEase EasingMode="EaseOut"/>
                             </DoubleAnimation.EasingFunction>
                         </DoubleAnimation>
                     </Storyboard>
@@ -297,7 +315,7 @@
                             Duration="0:0:0.3">
 
                             <DoubleAnimation.EasingFunction>
-                                <CubicEase EasingMode="EaseIn"/>
+                                <ExponentialEase EasingMode="EaseIn"/>
                             </DoubleAnimation.EasingFunction>
                         </DoubleAnimation>
                     </Storyboard>
@@ -313,7 +331,7 @@
                             Duration="0:0:0.3">
 
                             <DoubleAnimation.EasingFunction>
-                                <CubicEase EasingMode="EaseOut"/>
+                                <ExponentialEase EasingMode="EaseOut"/>
                             </DoubleAnimation.EasingFunction>
                         </DoubleAnimation>
                     </Storyboard>

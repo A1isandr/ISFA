@@ -1,5 +1,7 @@
-﻿  using System.Data.Common;
+﻿using System.Data.Common;
+using System.Reflection.Metadata.Ecma335;
 using System.Windows;
+using System.Windows.Xps.Serialization;
 using Windows.Media.Capture;
 using static ISFA.MVVM.Models.BinaryMatrixCell;
 
@@ -16,6 +18,8 @@ namespace ISFA.MVVM.Models
 		public static HashSet<HashSet<int>> InitialCompatibilitySets { get; private set; } = [];
 
 		public static HashSet<HashSet<int>> CorrectMaxCovering { get; private set; } = [];
+
+        public static HashSet<HashSet<int>> IncompatiblePairs { get; private set; } = [];
 
 		#endregion
 
@@ -144,79 +148,64 @@ namespace ISFA.MVVM.Models
 					}
 				}
 			}
-
+			
 			CorrectMaxCovering = [..InitialCompatibilitySets];
 
-			HashSet<HashSet<HashSet<int>>> incompatibleSets = [];
+			// Дробление множеств
+            HashSet<HashSet<int>> newSetsToAdd = [];
 
-			// Проверяем множества на наличие несовместимых состояний.
 			foreach (var set in CorrectMaxCovering)
 			{
-				incompatibleSets.Add(FindIncompatibleStates(set));
-			}
-
-			// Дробление множеств
-			for (int i = 0; i < CorrectMaxCovering.Count; i++)
-			{
-				var currentSet = CorrectMaxCovering.ElementAt(i);
-				var incompatibleSubsets = incompatibleSets.ElementAt(i);
-
-				if (incompatibleSubsets.Count == 0) continue;
-
-				// Разбиваем множество на подмножества, исключая несовместимые пары
-				List<HashSet<int>> newSubsets = new List<HashSet<int>>();
-				foreach (var incompatiblePair in incompatibleSubsets)
+				foreach (var element in set)
 				{
-					foreach (var elementToRemove in incompatiblePair)
+                    HashSet<int> subset = [..set];
+					subset.Remove(element);
+
+					foreach (var element2 in subset)
 					{
-						var newSubset = new HashSet<int>(currentSet);
-						newSubset.Remove(elementToRemove);
-						newSubsets.Add(newSubset);
+                        (int row, int column) = StateToBinaryMatrixCoords(element, element2);
+
+                        if (BinaryMatrix[row][column].Value != 0) continue;
+
+                        HashSet<int> newSet = [element];
+
+						foreach (var element3 in set.Where(element3 => element != element3))
+						{
+							(int row2, int column2) = StateToBinaryMatrixCoords(element, element3);
+							if (BinaryMatrix[row2][column2].Value == 1)
+							{
+								newSet.Add(element3);
+							}
+						}
+
+						set.Remove(element);
+						newSetsToAdd.Add(newSet);
+						break;
 					}
 				}
-
-				// Заменяем исходное множество новыми подмножествами
-				CorrectMaxCovering.Remove(currentSet);
-				CorrectMaxCovering.UnionWith(newSubsets);
 			}
+
+            foreach (var newSet in newSetsToAdd)
+            {
+                CorrectMaxCovering.Add(newSet);
+            }
 
 			// Поглощение множеств
-			bool changesMade;
-			do
+			foreach (var set in CorrectMaxCovering)
 			{
-				changesMade = false;
-				for (int i = 0; i < CorrectMaxCovering.Count; i++)
-				{
-					for (int j = i + 1; j < CorrectMaxCovering.Count; j++)
-					{
-						var set1 = CorrectMaxCovering.ElementAt(i);
-						var set2 = CorrectMaxCovering.ElementAt(j);
+                foreach (var set2 in CorrectMaxCovering)
+                {
+					if ((set != set2) && set.IsSupersetOf(set2)) CorrectMaxCovering.Remove(set2);
+                }
+            }
+        }
 
-						if (set1.IsSubsetOf(set2))
-						{
-							CorrectMaxCovering.Remove(set1);
-							changesMade = true;
-							break;
-						}
-						else if (set2.IsSubsetOf(set1))
-						{
-							CorrectMaxCovering.Remove(set2);
-							changesMade = true;
-							break;
-						}
-					}
-
-					if (changesMade) break; // Restart outer loop after a change
-				}
-			} while (changesMade);
-		}
-
-		/// <summary>
-		/// Поиск несовместимых состояний в блоках совместимости.
-		/// </summary>
-		/// <param name="set"></param>
-		/// <returns></returns>
-		private static HashSet<HashSet<int>> FindIncompatibleStates(HashSet<int> set)
+        /// <summary>
+        /// Поиск несовместимых состояний в блоках совместимости.
+        /// </summary>
+        /// <param name="set"></param>
+        /// <returns></returns>
+        private static HashSet<HashSet<int>> FindIncompatibleStates(HashSet<int> set)
 		{
 			HashSet<HashSet<int>> incompatibleSets = [];
 

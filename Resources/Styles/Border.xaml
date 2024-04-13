@@ -5,8 +5,17 @@
            TargetType="Border">
 
         <Setter Property="CornerRadius" Value="20"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="BorderBrush" Value="{StaticResource TableBorderBrush}"></Setter>
         <Setter Property="Background" Value="{StaticResource TableBackgroundBrush}"/>
         <Setter Property="Padding" Value="10"/>
         <Setter Property="Margin" Value="0, 0, 0, 20"/>
+        <Setter Property="Effect">
+            <Setter.Value>
+                <DropShadowEffect
+                    BlurRadius="20"
+                    ShadowDepth="0"/>
+            </Setter.Value>
+        </Setter>
     </Style>
 </ResourceDictionary>

@@ -37,8 +37,7 @@
                  HorizontalAlignment="Stretch"
                  VerticalAlignment="Stretch"
                  Background="{Binding ElementName=Wrapper, Path=Background}"
-                 Padding="5, 0, 5, 0"
-                 MouseDown="Header_MouseDown">
+                 Padding="5, 0, 5, 0">
 
                 <Border.Effect>
                     <DropShadowEffect
@@ -101,22 +100,19 @@
                             Panel.ZIndex="1"
                             Content="{Binding Geometry, Source={StaticResource WindowMinimizeIcon}}"
                             Style="{StaticResource WindowHeaderButton}"
-                            Margin="5"
-                            Click="MinWindowButton_Click"/>
+                            Margin="5"/>
 
                         <Button Name="MaxWindowButton"
                             Panel.ZIndex="1"
                             Content="{Binding Geometry, Source={StaticResource WindowMaximizeIcon}}"
                             Style="{StaticResource WindowHeaderButton}"
-                            Margin="5"
-                            Click="MaxWindowButton_Click"/>
+                            Margin="5"/>
 
                         <Button Name="CloseWindowButton"
                             Panel.ZIndex="0"
                             Content="{Binding Geometry, Source={StaticResource CloseIcon}}"
                             Style="{StaticResource CloseWindowHeaderButton}"
-                            Margin="5, 5, 0, 5"
-                            Click="CloseWindowButton_Click"/>
+                            Margin="5, 5, 0, 5"/>
                     </StackPanel>
                 </Grid>
             </Border>

@@ -41,8 +41,21 @@ namespace ISFA.MVVM.ViewModels.BinaryMatrix
         [Reactive]
         public ObservableCollection<StateViewModel> BinaryMatrix { get; set; } = [];
 
-        private readonly ObservableAsPropertyHelper<bool> _isTableNotEmpty;
+		[Reactive]
+		public ObservableCollection<string> InitialCompatibilitySets { get; set; } = [];
+
+        [Reactive]
+        public ExpandState State { get; set; }
+
+		private readonly ObservableAsPropertyHelper<bool> _isTableNotEmpty;
         public bool IsTableNotEmpty => _isTableNotEmpty.Value;
+
+		public enum ExpandState
+        {
+	        Default,
+	        BlocksExpanded,
+	        TableExpanded
+        }
 
 		#endregion
 

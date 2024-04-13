@@ -61,69 +61,79 @@ namespace ISFA
 						ViewModel.IsHelpViewOpen = false;
 					})
 					.DisposeWith(disposables);
+
+				Header
+					.Events()
+					.MouseDown
+					.Subscribe(e =>
+					{
+						if (WindowState == WindowState.Maximized)
+						{
+							var mouseWindowRelativeCoords = Mouse.GetPosition(this);
+
+							Left = mouseWindowRelativeCoords.X;
+							Top = mouseWindowRelativeCoords.Y - 5;
+
+							WindowState = WindowState.Normal;
+						}
+
+						DragMove();
+					})
+					.DisposeWith(disposables);
+
+				CloseWindowButton
+					.Events()
+					.Click
+					.Subscribe(e => Close())
+					.DisposeWith(disposables);
+
+				MaxWindowButton
+					.Events()
+					.Click
+					.Subscribe(e =>
+					{
+						switch (WindowState)
+						{
+							case WindowState.Maximized:
+							{
+								WindowState = WindowState.Normal;
+
+								var resource = Application.Current.FindResource(WindowMaximizeIconKey);
+
+								if (resource is not null)
+								{
+									MaxWindowButton.Content = ((GeometryDrawing)resource).Geometry;
+								}
+
+								break;
+							}
+							case WindowState.Normal:
+							{
+								WindowState = WindowState.Maximized;
+
+								var resource = Application.Current.FindResource(WindowRestoreIconKey);
+
+								if (resource is not null)
+								{
+									MaxWindowButton.Content = ((GeometryDrawing)resource).Geometry;
+								}
+
+								break;
+							}
+							case WindowState.Minimized:
+								break;
+							default:
+								throw new ArgumentOutOfRangeException(nameof(e.Source));
+						}
+					})
+					.DisposeWith(disposables);
+
+				MinWindowButton
+					.Events()
+					.Click
+					.Subscribe(e => WindowState = WindowState.Minimized)
+					.DisposeWith(disposables);
 			});
-		}
-
-		private void Header_MouseDown(object sender, MouseButtonEventArgs e)
-		{
-			if (WindowState == WindowState.Maximized)
-			{
-				var mouseWindowRelativeCoords = Mouse.GetPosition(this);
-
-				Left = mouseWindowRelativeCoords.X;
-				Top = mouseWindowRelativeCoords.Y - 5;
-
-				WindowState = WindowState.Normal;
-			}
-
-			DragMove();
-		}
-
-		private void CloseWindowButton_Click(object sender, RoutedEventArgs e)
-		{
-			Close();
-		}
-
-		private void MaxWindowButton_Click(object sender, RoutedEventArgs e)
-		{
-			switch (WindowState)
-			{
-				case WindowState.Maximized:
-				{
-					WindowState = WindowState.Normal;
-
-					var resource = Application.Current.FindResource(WindowMaximizeIconKey);
-
-					if (resource is not null)
-					{
-						MaxWindowButton.Content = ((GeometryDrawing)resource).Geometry;
-					}
-
-					break;
-				}
-				case WindowState.Normal:
-				{
-					WindowState = WindowState.Maximized;
-
-					var resource = Application.Current.FindResource(WindowRestoreIconKey);
-
-					if (resource is not null)
-					{
-						MaxWindowButton.Content = ((GeometryDrawing)resource).Geometry;
-					}
-
-					break;
-				}
-				case WindowState.Minimized:
-					break;
-				default:
-					throw new ArgumentOutOfRangeException(nameof(sender));
-			}
-		}
-
-		private void MinWindowButton_Click(object sender, RoutedEventArgs e)
-		{
-			WindowState = WindowState.Minimized;
 		}
 	}
 }

@@ -1,7 +1,11 @@
 ﻿using System.Reactive.Disposables;
+using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 using ISFA.MVVM.ViewModels.BinaryMatrix;
+using ReactiveMarbles.ObservableEvents;
 using ReactiveUI;
+using static ISFA.MVVM.ViewModels.BinaryMatrix.BinaryMatrixViewModel;
 
 namespace ISFA.MVVM.Views.BinaryMatrix
 {
@@ -10,11 +14,13 @@ namespace ISFA.MVVM.Views.BinaryMatrix
     /// </summary>
     public partial class BinaryMatrixView : ReactiveUserControl<BinaryMatrixViewModel>
 	{
+		private const double MinBlocksColumnWidth = 100;
+
 		public BinaryMatrixView()
 		{
 			InitializeComponent();
 
-			ViewModel = BinaryMatrixViewModel.Instance;
+			ViewModel = Instance;
 
 			this.WhenActivated(disposables =>
 			{
@@ -32,15 +38,82 @@ namespace ISFA.MVVM.Views.BinaryMatrix
 						viewModel => viewModel.BinaryMatrix,
 						view => view.Columns.ItemsSource)
 					.DisposeWith(disposables);
+
+				this.OneWayBind(ViewModel,
+						viewModel => viewModel.InitialCompatibilitySets,
+						view => view.Blocks.ItemsSource)
+					.DisposeWith(disposables);
+
+				ExpandBlocksButton
+					.Events()
+					.Click
+					.Subscribe(e =>
+					{
+						switch (ViewModel.State)
+						{
+							case ExpandState.Default:
+								TableColumn.Width = new GridLength(0, GridUnitType.Pixel);
+								ViewModel.State = ExpandState.BlocksExpanded;
+								break;
+							case ExpandState.TableExpanded:
+								BlocksColumn.MinWidth = MinBlocksColumnWidth;
+								BlocksColumn.Width = new GridLength(1, GridUnitType.Star);
+								ViewModel.State = ExpandState.Default;
+								break;
+							case ExpandState.BlocksExpanded:
+							default:
+								break;
+						}
+					})
+					.DisposeWith(disposables);
+
+				ExpandTableButton
+					.Events()
+					.Click
+					.Subscribe(e =>
+					{
+						switch (ViewModel.State)
+						{
+							case ExpandState.Default:
+								BlocksColumn.MinWidth = 0;
+								BlocksColumn.Width = new GridLength(0, GridUnitType.Pixel);
+								ViewModel.State = ExpandState.TableExpanded;
+								break;
+							case ExpandState.BlocksExpanded:
+								TableColumn.Width = new GridLength(1, GridUnitType.Star);
+								ViewModel.State = ExpandState.Default;
+								break;
+							case ExpandState.TableExpanded:
+							default:
+								break;
+						}
+					})
+					.DisposeWith(disposables);
+
+				TableScrollViewer
+					.Events()
+					.ScrollChanged
+					.Subscribe(e =>
+					{
+						if (e.Source is not ScrollViewer scrollViewer) return;
+
+						ColumnHeadersScrollViewer.ScrollToHorizontalOffset(scrollViewer.HorizontalOffset);
+						RowHeadersScrollViewer.ScrollToVerticalOffset(scrollViewer.VerticalOffset);
+						BlocksScrollViewer.ScrollToVerticalOffset(scrollViewer.VerticalOffset);
+					})
+					.DisposeWith(disposables);
+
+				BlocksScrollViewer
+					.Events()
+					.ScrollChanged
+					.Subscribe(e =>
+					{
+						if (e.Source is not ScrollViewer scrollViewer) return;
+
+						RowHeadersScrollViewer.ScrollToVerticalOffset(scrollViewer.VerticalOffset);
+					})
+					.DisposeWith(disposables);
 			});
-		}
-
-		private void TableScrollViewer_OnScrollChanged(object sender, ScrollChangedEventArgs e)
-		{
-			if (sender is not ScrollViewer scrollViewer) return;
-
-			ColumnHeadersScrollViewer.ScrollToHorizontalOffset(scrollViewer.HorizontalOffset);
-			RowHeadersScrollViewer.ScrollToVerticalOffset(scrollViewer.VerticalOffset);
 		}
 	}
 }

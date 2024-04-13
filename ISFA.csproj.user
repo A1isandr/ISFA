@@ -81,6 +81,9 @@
     <Page Update="Resources\Images\SvgImages.xaml">
       <SubType>Designer</SubType>
     </Page>
+    <Page Update="Resources\Languages\lang.ru-RU.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="Resources\Styles\Border.xaml">
       <SubType>Designer</SubType>
     </Page>

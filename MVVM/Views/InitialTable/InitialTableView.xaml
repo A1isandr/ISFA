@@ -173,7 +173,7 @@
                 <TextBlock x:Name="EmptyTableLabel"
                     Grid.Row="1"
                     Grid.Column="1"
-                    Text="Добавьте столбцы и строки с помошью кнопки '+'."
+                    Text="{StaticResource InitialTableEmptyTableText}"
                     FontSize="14"
                     FontWeight="Medium"
                     Foreground="Gray"
