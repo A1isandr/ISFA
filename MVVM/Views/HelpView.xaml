@@ -22,7 +22,7 @@
                     HorizontalAlignment="Center"
                     Margin="0, 0, 0, 10"/>
                 
-                <Border
+                <!--<Border
                     Style="{StaticResource TextBorder}">
                     
                     <StackPanel>
@@ -33,7 +33,7 @@
                             HorizontalAlignment="Center"
                             Margin="0, 0, 0, 10"/>
                     </StackPanel>
-                </Border>
+                </Border>-->
 
                 <Border
                     Style="{StaticResource TextBorder}">
@@ -78,7 +78,8 @@
                         <TextBlock
                             FontSize="14"
                             FontWeight="Medium"
-                            Foreground="White">
+                            Foreground="White"
+                            TextWrapping="Wrap">
                             
                             <Run
                                 Text="{StaticResource HelpViewSpecialThanksContributor1Name}"

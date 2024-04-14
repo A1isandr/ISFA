@@ -12,7 +12,8 @@
             <v:String x:Key="InitialTableEmptyTableText">Добавьте столбцы и строки с помошью кнопки '+'.</v:String>
 
         <!--BinaryMatrix-->
-            <v:String x:Key="BinaryMatrixBlocksTitleText">Блоки</v:String>
+            <v:String x:Key="BinaryMatrixInitialBlocksTitleText">Начальные блоки</v:String>
+            <v:String x:Key="BinaryMatrixMaxCoverBlocksTitleText">Правильная максимальная группировка</v:String>
 
     <!--HelpView-->
         <v:String x:Key="HelpViewTitle">Справка</v:String>

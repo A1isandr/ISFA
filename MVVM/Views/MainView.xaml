@@ -102,39 +102,6 @@
                             </binaryMatrix:BinaryMatrixView.Effect>
                         </binaryMatrix:BinaryMatrixView>
                     </StackPanel>
-
-                    <StackPanel
-                        Orientation="Vertical"
-                        HorizontalAlignment="Center"
-                        Margin="0, 0, 0, 10">
-
-                        <Label
-                            Content="Максимальное правильное покрытие:"
-                            FontSize="14"
-                            FontWeight="Medium"
-                            HorizontalAlignment="Center"
-                            Margin="0, 0, 0, 10"/>
-
-                        <ItemsControl x:Name="CorrectMaxCoveringCompatibilitySets">
-                            <ItemsControl.ItemsPanel>
-                                <ItemsPanelTemplate>
-                                    <StackPanel
-                                        Orientation="Vertical"/>
-                                </ItemsPanelTemplate>
-                            </ItemsControl.ItemsPanel>
-
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <TextBlock
-                                        Text="{Binding}"
-                                        FontSize="20"
-                                        FontWeight="Medium"
-                                        Foreground="White"
-                                        Margin="0, 0, 0, 10"/>
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
-                    </StackPanel>
                 </StackPanel>
             </StackPanel>
         </ScrollViewer>

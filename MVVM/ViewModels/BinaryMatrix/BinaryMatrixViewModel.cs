@@ -45,6 +45,9 @@ namespace ISFA.MVVM.ViewModels.BinaryMatrix
 		public ObservableCollection<string> InitialCompatibilitySets { get; set; } = [];
 
         [Reactive]
+        public ObservableCollection<string> MaxCoverCompatibilitySets { get; set; } = [];
+
+        [Reactive]
         public ExpandState State { get; set; }
 
 		private readonly ObservableAsPropertyHelper<bool> _isTableNotEmpty;

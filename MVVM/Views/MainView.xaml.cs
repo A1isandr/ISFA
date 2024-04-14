@@ -45,11 +45,6 @@ namespace ISFA.MVVM.Views
 						viewModel => viewModel.IsBinaryMatrixVisible,
 						view => view.ResultsStackPanel.Visibility)
 					.DisposeWith(disposables);
-
-				this.OneWayBind(ViewModel,
-		                viewModel => viewModel.CorrectMaxCovering,
-		                view => view.CorrectMaxCoveringCompatibilitySets.ItemsSource)
-	                .DisposeWith(disposables);
 			});
         }
     }

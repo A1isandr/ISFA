@@ -41,7 +41,12 @@ namespace ISFA.MVVM.Views.BinaryMatrix
 
 				this.OneWayBind(ViewModel,
 						viewModel => viewModel.InitialCompatibilitySets,
-						view => view.Blocks.ItemsSource)
+						view => view.InitialBlocks.ItemsSource)
+					.DisposeWith(disposables);
+
+				this.OneWayBind(ViewModel,
+						viewModel => viewModel.MaxCoverCompatibilitySets,
+						view => view.MaxCoverBlocks.ItemsSource)
 					.DisposeWith(disposables);
 
 				ExpandBlocksButton
@@ -99,11 +104,11 @@ namespace ISFA.MVVM.Views.BinaryMatrix
 
 						ColumnHeadersScrollViewer.ScrollToHorizontalOffset(scrollViewer.HorizontalOffset);
 						RowHeadersScrollViewer.ScrollToVerticalOffset(scrollViewer.VerticalOffset);
-						BlocksScrollViewer.ScrollToVerticalOffset(scrollViewer.VerticalOffset);
+						InitialBlocksScrollViewer.ScrollToVerticalOffset(scrollViewer.VerticalOffset);
 					})
 					.DisposeWith(disposables);
 
-				BlocksScrollViewer
+				InitialBlocksScrollViewer
 					.Events()
 					.ScrollChanged
 					.Subscribe(e =>

@@ -40,9 +40,6 @@ namespace ISFA.MVVM.ViewModels
 		private readonly ObservableAsPropertyHelper<bool> _isBinaryMatrixVisible;
 		public bool IsBinaryMatrixVisible => _isBinaryMatrixVisible.Value;
 
-		[Reactive]
-		public ObservableCollection<string> CorrectMaxCovering { get; set; } = [];
-
         #endregion
 
 		#region Constructors
@@ -84,8 +81,8 @@ namespace ISFA.MVVM.ViewModels
 
 		private async Task PaulUngerMethod()
 		{
-			CorrectMaxCovering = [];
 			BinaryMatrix.InitialCompatibilitySets = [];
+			BinaryMatrix.MaxCoverCompatibilitySets = [];
 
 			// Заполняем все пустые ячейки.
 			foreach (var state in InitialTable.States)
@@ -102,18 +99,26 @@ namespace ISFA.MVVM.ViewModels
 				}
 			}
 
-			// Проводим анализ.
-			await Task.Run(() => PaulUnger.Calculate
-			(
-				InitialTable.States
-					.Select
-					(
-						column => column.TransitionReactionPairs
-							.Select(state => state.TransitionReactionPair)
-							.ToList()
-					)
-					.ToList()
-			));
+			try
+			{
+				// Проводим анализ.
+				await Task.Run(() => PaulUnger.Calculate
+				(
+					InitialTable.States
+						.Select
+						(
+							column => column.TransitionReactionPairs
+								.Select(state => state.TransitionReactionPair)
+								.ToList()
+						)
+						.ToList()
+				));
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show($"{ex.Message}");
+				return;
+			}
 
 			BinaryMatrix.ColumnHeaders = new ObservableCollection<HeaderViewModel>(InitialTable.ColumnHeaders.Skip(1));
 			BinaryMatrix.RowHeaders = new ObservableCollection<HeaderViewModel>(InitialTable.ColumnHeaders.Take(InitialTable.ColumnHeaders.Count - 1));
@@ -150,7 +155,7 @@ namespace ISFA.MVVM.ViewModels
 	            sb.Append(string.Join(", ", compatibilitySet));
 	            sb.Append('}');
 
-	            CorrectMaxCovering.Add(sb.ToString());
+	            BinaryMatrix.MaxCoverCompatibilitySets.Add(sb.ToString());
             }
 		}
 
