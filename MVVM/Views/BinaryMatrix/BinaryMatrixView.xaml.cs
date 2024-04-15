@@ -1,18 +1,17 @@
-﻿using System.Reactive.Disposables;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Media;
-using ISFA.MVVM.ViewModels.BinaryMatrix;
+﻿using ISFA.MVVM.ViewModels.BinaryMatrix;
 using ReactiveMarbles.ObservableEvents;
 using ReactiveUI;
+using System.Reactive.Disposables;
+using System.Windows;
+using System.Windows.Controls;
 using static ISFA.MVVM.ViewModels.BinaryMatrix.BinaryMatrixViewModel;
 
 namespace ISFA.MVVM.Views.BinaryMatrix
 {
-    /// <summary>
-    /// Логика взаимодействия для BinaryMatrixView.xaml
-    /// </summary>
-    public partial class BinaryMatrixView : ReactiveUserControl<BinaryMatrixViewModel>
+	/// <summary>
+	/// Логика взаимодействия для BinaryMatrixView.xaml
+	/// </summary>
+	public partial class BinaryMatrixView : ReactiveUserControl<BinaryMatrixViewModel>
 	{
 		private const double MinBlocksColumnWidth = 100;
 

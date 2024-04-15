@@ -1,17 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Reactive.Linq;
-using System.Reactive;
-using System.Text;
-using System.Threading.Tasks;
-using ReactiveUI;
+﻿using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
+using System.Collections.ObjectModel;
+using System.Reactive;
+using System.Reactive.Linq;
 
 namespace ISFA.MVVM.ViewModels.BinaryMatrix
 {
-    public class BinaryMatrixViewModel : ReactiveObject
+	public class BinaryMatrixViewModel : ReactiveObject
     {
         #region Singleton
 

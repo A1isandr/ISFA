@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ReactiveUI;
+﻿using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
 namespace ISFA.MVVM.Models
 {
-    public class TransitionReactionPair : ReactiveObject
+	public class TransitionReactionPair : ReactiveObject
     {
 		#region Properties
 

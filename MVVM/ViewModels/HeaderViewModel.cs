@@ -1,17 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reactive;
-using System.Reactive.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ISFA.MVVM.ViewModels.InitialTable;
+﻿using ISFA.MVVM.ViewModels.InitialTable;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
+using System.Reactive;
+using System.Reactive.Linq;
 
 namespace ISFA.MVVM.ViewModels
 {
-    public class HeaderViewModel : ReactiveObject
+	public class HeaderViewModel : ReactiveObject
     {
 		#region Properties
 

@@ -1,17 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.RightsManagement;
-using System.Text;
-using System.Threading.Tasks;
-using ISFA.Misc;
-using ISFA.MVVM.Models;
+﻿using ISFA.MVVM.Models;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
 namespace ISFA.MVVM.ViewModels.InitialTable
 {
-    public class TransitionReactionPairViewModel(HeaderViewModel column, HeaderViewModel row) : ReactiveObject
+	public class TransitionReactionPairViewModel(HeaderViewModel column, HeaderViewModel row) : ReactiveObject
     {
         #region Properties
 

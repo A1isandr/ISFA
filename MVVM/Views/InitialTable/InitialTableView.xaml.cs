@@ -1,30 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reactive.Disposables;
+﻿using System.Reactive.Disposables;
 using System.Reactive.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Media.TextFormatting;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using ISFA.MVVM.ViewModels.InitialTable;
 using ReactiveMarbles.ObservableEvents;
 using ReactiveUI;
 
-namespace ISFA.MVVM.Views
+namespace ISFA.MVVM.Views.InitialTable
 {
-    /// <summary>
-    /// Логика взаимодействия для InitialTableView.xaml
-    /// </summary>
-    public partial class InitialTableView : ReactiveUserControl<InitialTableViewModel>
+	/// <summary>
+	/// Логика взаимодействия для InitialTableView.xaml
+	/// </summary>
+	public partial class InitialTableView : ReactiveUserControl<InitialTableViewModel>
 	{
 		public InitialTableView()
 		{

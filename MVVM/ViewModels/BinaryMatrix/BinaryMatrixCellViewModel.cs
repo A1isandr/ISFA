@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reactive.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Media;
-using ISFA.MVVM.Models;
+﻿using ISFA.MVVM.Models;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
+using System.Reactive.Linq;
+using System.Windows.Media;
 
 namespace ISFA.MVVM.ViewModels.BinaryMatrix
 {

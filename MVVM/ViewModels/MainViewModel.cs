@@ -7,7 +7,6 @@ using System.Reactive;
 using System.Reactive.Linq;
 using System.Text;
 using System.Windows;
-using ReactiveUI.Fody.Helpers;
 using StateViewModel = ISFA.MVVM.ViewModels.BinaryMatrix.StateViewModel;
 
 namespace ISFA.MVVM.ViewModels

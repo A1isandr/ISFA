@@ -1,20 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
-using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using ISFA.MVVM.Models;
-using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
 
 namespace ISFA.MVVM.ViewModels.InitialTable
 {
-    public class InitialTableViewModel : ReactiveObject
+	public class InitialTableViewModel : ReactiveObject
     {
         #region Singleton
 

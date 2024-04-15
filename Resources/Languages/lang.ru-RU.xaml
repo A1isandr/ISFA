@@ -4,7 +4,7 @@
 
     <!--MainView-->
         <v:String x:Key="MainViewInitialTableTitle">Исходные данные:</v:String>
-        <v:String x:Key="MainViewBinaryMatrixTitle">Бинарная матрица:</v:String>
+        <v:String x:Key="MainViewBinaryMatrixTitle">Результаты:</v:String>
         <v:String x:Key="MainViewCalculateButtonText">Рассчитать</v:String>
         <v:String x:Key="MainViewClearButtonText">Очистить</v:String>
 
@@ -13,7 +13,7 @@
 
         <!--BinaryMatrix-->
             <v:String x:Key="BinaryMatrixInitialBlocksTitleText">Начальные блоки</v:String>
-            <v:String x:Key="BinaryMatrixMaxCoverBlocksTitleText">Правильная максимальная группировка</v:String>
+            <v:String x:Key="BinaryMatrixMaxCoverBlocksTitleText">Максимальная правильная группировка</v:String>
 
     <!--HelpView-->
         <v:String x:Key="HelpViewTitle">Справка</v:String>

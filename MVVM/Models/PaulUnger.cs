@@ -1,9 +1,4 @@
-﻿using System.Data.Common;
-using System.Reflection.Metadata.Ecma335;
-using System.Windows;
-using System.Windows.Xps.Serialization;
-using Windows.Media.Capture;
-using static ISFA.MVVM.Models.BinaryMatrixCell;
+﻿using static ISFA.MVVM.Models.BinaryMatrixCell;
 
 namespace ISFA.MVVM.Models
 {
