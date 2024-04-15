@@ -149,25 +149,25 @@ namespace ISFA.MVVM.Models
 				}
 			}
 			
-			CorrectMaxCovering = [..InitialCompatibilitySets];
+			CorrectMaxCovering = InitialCompatibilitySets.Select(set => new HashSet<int>(set)).ToHashSet();
 
 			// Дробление множеств
-            HashSet<HashSet<int>> newSetsToAdd = [];
+			HashSet<HashSet<int>> newSetsToAdd = [];
 
 			foreach (var set in CorrectMaxCovering)
 			{
 				foreach (var element in set)
 				{
-                    HashSet<int> subset = [..set];
+					HashSet<int> subset = [.. set];
 					subset.Remove(element);
 
 					foreach (var element2 in subset)
 					{
-                        (int row, int column) = StateToBinaryMatrixCoords(element, element2);
+						(int row, int column) = StateToBinaryMatrixCoords(element, element2);
 
-                        if (BinaryMatrix[row][column].Value != 0) continue;
+						if (BinaryMatrix[row][column].Value != 0) continue;
 
-                        HashSet<int> newSet = [element];
+						HashSet<int> newSet = [element];
 
 						foreach (var element3 in set.Where(element3 => element != element3))
 						{
@@ -185,20 +185,20 @@ namespace ISFA.MVVM.Models
 				}
 			}
 
-            foreach (var newSet in newSetsToAdd)
-            {
-                CorrectMaxCovering.Add(newSet);
-            }
+			foreach (var newSet in newSetsToAdd)
+			{
+				CorrectMaxCovering.Add(newSet);
+			}
 
 			// Поглощение множеств
 			foreach (var set in CorrectMaxCovering)
 			{
-                foreach (var set2 in CorrectMaxCovering)
-                {
+				foreach (var set2 in CorrectMaxCovering)
+				{
 					if ((set != set2) && set.IsSupersetOf(set2)) CorrectMaxCovering.Remove(set2);
-                }
-            }
-        }
+				}
+			}
+		}
 
         /// <summary>
         /// Поиск несовместимых состояний в блоках совместимости.
