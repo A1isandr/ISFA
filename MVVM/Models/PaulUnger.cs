@@ -1,4 +1,6 @@
-﻿using static ISFA.MVVM.Models.BinaryMatrixCell;
+﻿using JetBrains.Annotations;
+using System.Windows;
+using static ISFA.MVVM.Models.BinaryMatrixCell;
 
 namespace ISFA.MVVM.Models
 {
@@ -151,34 +153,37 @@ namespace ISFA.MVVM.Models
 
 			foreach (var set in CorrectMaxCovering)
 			{
-				foreach (var element in set)
-				{
-					HashSet<int> subset = [.. set];
-					subset.Remove(element);
-
-					foreach (var element2 in subset)
-					{
-						(int row, int column) = StateToBinaryMatrixCoords(element, element2);
-
-						if (BinaryMatrix[row][column].Value != 0) continue;
-
-						HashSet<int> newSet = [element];
-
-						foreach (var element3 in set.Where(element3 => element != element3))
-						{
-							(int row2, int column2) = StateToBinaryMatrixCoords(element, element3);
-							if (BinaryMatrix[row2][column2].Value == 1)
-							{
-								newSet.Add(element3);
-							}
-						}
-
-						set.Remove(element);
-						newSetsToAdd.Add(newSet);
-						break;
-					}
-				}
+				CrushingSets(set);
 			}
+
+			void CrushingSets(HashSet<int> set)
+			{
+                foreach (var element in set)
+                {
+                    HashSet<int> subset = [.. set];
+                    subset.Remove(element);
+                    foreach (var element2 in subset)
+                    {
+                        (int row, int column) = StateToBinaryMatrixCoords(element, element2);
+                        if (BinaryMatrix[row][column].Value != 0) continue;
+                        HashSet<int> newSet = [element];
+
+                        foreach (var element3 in set.Where(element3 => element != element3))
+                        {
+                            (int row2, int column2) = StateToBinaryMatrixCoords(element, element3);
+                            if (BinaryMatrix[row2][column2].Value == 1)
+                            {
+                                newSet.Add(element3);
+                            }
+                        }
+						
+                        set.Remove(element);
+                        CrushingSets(newSet);
+                        newSetsToAdd.Add(newSet);
+                        break;
+                    }
+                }
+            }
 
 			foreach (var newSet in newSetsToAdd)
 			{
