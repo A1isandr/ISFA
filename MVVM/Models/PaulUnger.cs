@@ -148,42 +148,13 @@ namespace ISFA.MVVM.Models
 			
 			CorrectMaxCovering = InitialCompatibilitySets.Select(set => new HashSet<int>(set)).ToHashSet();
 
-			// Дробление множеств
 			HashSet<HashSet<int>> newSetsToAdd = [];
 
+			// Дробление множетсв.
 			foreach (var set in CorrectMaxCovering)
 			{
-				CrushingSets(set);
+				newSetsToAdd.UnionWith(CrushingSets(set));
 			}
-
-			void CrushingSets(HashSet<int> set)
-			{
-                foreach (var element in set)
-                {
-                    HashSet<int> subset = [.. set];
-                    subset.Remove(element);
-                    foreach (var element2 in subset)
-                    {
-                        (int row, int column) = StateToBinaryMatrixCoords(element, element2);
-                        if (BinaryMatrix[row][column].Value != 0) continue;
-                        HashSet<int> newSet = [element];
-
-                        foreach (var element3 in set.Where(element3 => element != element3))
-                        {
-                            (int row2, int column2) = StateToBinaryMatrixCoords(element, element3);
-                            if (BinaryMatrix[row2][column2].Value == 1)
-                            {
-                                newSet.Add(element3);
-                            }
-                        }
-						
-                        set.Remove(element);
-                        CrushingSets(newSet);
-                        newSetsToAdd.Add(newSet);
-                        break;
-                    }
-                }
-            }
 
 			foreach (var newSet in newSetsToAdd)
 			{
@@ -200,12 +171,50 @@ namespace ISFA.MVVM.Models
 			}
 		}
 
-        /// <summary>
-        /// Поиск несовместимых состояний в блоках совместимости.
-        /// </summary>
-        /// <param name="set"></param>
-        /// <returns></returns>
-        private static HashSet<HashSet<int>> FindIncompatibleStates(HashSet<int> set)
+		/// <summary>
+		/// Дробит множества.
+		/// </summary>
+		/// <param name="set"></param>
+		/// <returns></returns>
+		private static HashSet<HashSet<int>> CrushingSets(HashSet<int> set)
+		{
+			HashSet<HashSet<int>> newSetsToAdd = [];
+
+			foreach (var element in set)
+			{
+				HashSet<int> subset = [.. set];
+				subset.Remove(element);
+				foreach (var element2 in subset)
+				{
+					(int row, int column) = StateToBinaryMatrixCoords(element, element2);
+					if (BinaryMatrix[row][column].Value != 0) continue;
+					HashSet<int> newSet = [element];
+
+					foreach (var element3 in set.Where(element3 => element != element3))
+					{
+						(int row2, int column2) = StateToBinaryMatrixCoords(element, element3);
+						if (BinaryMatrix[row2][column2].Value == 1)
+						{
+							newSet.Add(element3);
+						}
+					}
+
+					set.Remove(element);
+					CrushingSets(newSet);
+					newSetsToAdd.Add(newSet);
+					break;
+				}
+			}
+
+			return newSetsToAdd;
+		}
+
+		/// <summary>
+		/// Поиск несовместимых состояний в блоках совместимости.
+		/// </summary>
+		/// <param name="set"></param>
+		/// <returns></returns>
+		private static HashSet<HashSet<int>> FindIncompatibleStates(HashSet<int> set)
 		{
 			HashSet<HashSet<int>> incompatibleSets = [];
 
